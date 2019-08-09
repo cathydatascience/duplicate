@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Week2_notes</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Class Material</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Practical Machine Learning</a>
+</li>
+<li>
+  <a href="https://cathydatascience.github.io/PracticalMachineLearning_Project/">Project Paper</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Notes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Week1_notes.html">Week 1</a>
+    </li>
+    <li>
+      <a href="Week2_notes.html">Week 2</a>
+    </li>
+    <li>
+      <a href="Week3_notes.html">Week 3</a>
+    </li>
+    <li>
+      <a href="Week4_notes.html">Week 4</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Quizzes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Week2quiz_codes.html">Week 2</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="Week3quiz_codes.html">Week 3</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="Week4quiz_codes.html">Week 4</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="http://cathydatascience.github.io/showprojectsonline">
+    <span class="fa fa-question fa-lg"></span>
+     
+    How to publish project paper(s) online
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Week2_notes</h1>
+
+</div>
+
+
+<div id="key-wordsconcepts-of-week-2" class="section level2">
+<h2>Key Words/Concepts of Week 2</h2>
+<ul>
+<li><code>caret</code> package in R</li>
+<li>Ways to split the dataset<br />
+# one-time random sampling<br />
+# k-fold cross validation<br />
+# bootstrap resampling<br />
+# time series data - time slices<br />
+# modify arguments in the <code>train</code> function<br />
+</li>
+<li>Exploratory analysis<br />
+# plot the predictor<br />
+</li>
+<li>Preprocess the data
+<ul>
+<li>standardize the predictor(s) and Box-cox transformation</li>
+<li>impute missing values</li>
+<li>Deal with near collinearity in the predictors<br />
+# find the near zero variance variables (plus: 1. create dummy variables; 2. use spline to add curvature to predictors) # principal component analysis (PCA)</li>
+</ul></li>
+<li>Examples: Regression with a continuous outcome variable<br />
+# single predictor<br />
+# multiple regressors</li>
+</ul>
+</div>
+<div id="caret-page-in-r" class="section level2">
+<h2><code>caret</code> Page in R</h2>
+<div id="commands" class="section level3">
+<h3>commands</h3>
+<ul>
+<li>data cleaning: <code>preProcess</code></li>
+<li>(within the training set) data splitting: <code>createDataPartition</code>; <code>createResample</code>; <code>createTimeSlices</code></li>
+<li>training/testing functions: <code>train</code>; <code>predict</code></li>
+<li>model comparison: <code>confusionMatrix</code> (binary and categorical data)</li>
+</ul>
+<p><code>caret</code> packages provides a <strong><em>unifying</em></strong> framework on many machine learning algorithms (linear discriminant analysis ….). Each one will produce an object as outcome which requires the input of <code>type=...</code>, but <code>caret</code> package eliminates that need.</p>
+</div>
+<div id="example" class="section level3">
+<h3>example</h3>
+<pre class="r"><code>library(caret); library(kernlab); data(spam)
+inTrain&lt;-createDataPartition(y=spam$type, p=0.75, list=FALSE) #75% of to train and the remainder to test
+training&lt;-spam[inTrain, ]
+testing&lt;-spam[-inTrain, ]
+dim(training)</code></pre>
+<pre><code>## [1] 3451   58</code></pre>
+<pre class="r"><code>set.seed(2342)
+modelFit&lt;-train(type~., data=training, method=&quot;glm&quot;)
+modelFit</code></pre>
+<pre><code>## Generalized Linear Model 
+## 
+## 3451 samples
+##   57 predictor
+##    2 classes: &#39;nonspam&#39;, &#39;spam&#39; 
+## 
+## No pre-processing
+## Resampling: Bootstrapped (25 reps) 
+## Summary of sample sizes: 3451, 3451, 3451, 3451, 3451, 3451, ... 
+## Resampling results:
+## 
+##   Accuracy   Kappa    
+##   0.9222106  0.8357735</code></pre>
+<pre class="r"><code>modelFit$finalModel</code></pre>
+<pre><code>## 
+## Call:  NULL
+## 
+## Coefficients:
+##       (Intercept)               make            address  
+##        -1.601e+00         -4.982e-01         -1.494e-01  
+##               all              num3d                our  
+##         1.270e-01          2.001e+00          6.483e-01  
+##              over             remove           internet  
+##         8.519e-01          2.010e+00          4.665e-01  
+##             order               mail            receive  
+##         1.282e+00          2.704e-01         -1.463e-02  
+##              will             people             report  
+##        -2.094e-01         -2.586e-02          2.198e-01  
+##         addresses               free           business  
+##         3.464e+00          1.016e+00          1.133e+00  
+##             email                you             credit  
+##         8.560e-02          7.134e-02          8.248e-01  
+##              your               font             num000  
+##         2.571e-01          1.583e-01          1.882e+00  
+##             money                 hp                hpl  
+##         2.981e-01         -2.458e+00         -5.347e-01  
+##            george             num650                lab  
+##        -9.811e+00          5.230e-01         -2.420e+00  
+##              labs             telnet             num857  
+##        -7.674e-01         -7.623e+00          2.258e+00  
+##              data             num415              num85  
+##        -9.731e-01          1.527e+00         -1.843e+00  
+##        technology            num1999              parts  
+##         7.172e-01          7.304e-03         -6.740e-01  
+##                pm             direct                 cs  
+##        -1.039e+00         -5.562e-01         -5.733e+02  
+##           meeting           original            project  
+##        -2.972e+00         -8.951e-01         -1.785e+00  
+##                re                edu              table  
+##        -7.529e-01         -1.354e+00         -2.103e+00  
+##        conference      charSemicolon   charRoundbracket  
+##        -4.234e+00         -1.390e+00         -3.342e-01  
+## charSquarebracket    charExclamation         charDollar  
+##        -1.361e+00          2.642e-01          6.085e+00  
+##          charHash         capitalAve        capitalLong  
+##         3.236e+00         -2.873e-03          9.752e-03  
+##      capitalTotal  
+##         1.194e-03  
+## 
+## Degrees of Freedom: 3450 Total (i.e. Null);  3393 Residual
+## Null Deviance:       4628 
+## Residual Deviance: 1338  AIC: 1454</code></pre>
+<pre class="r"><code>predictions&lt;-predict(modelFit, newdata=testing) #pass the object &quot;modelFit&quot; got from the train function
+head(predictions) #show the first 6 predictions</code></pre>
+<pre><code>## [1] spam spam spam spam spam spam
+## Levels: nonspam spam</code></pre>
+<pre class="r"><code>confusionMatrix(predictions, testing$type) #report the 2*2 table (TP and FN etc.)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction nonspam spam
+##    nonspam     658   52
+##    spam         39  401
+##                                           
+##                Accuracy : 0.9209          
+##                  95% CI : (0.9037, 0.9358)
+##     No Information Rate : 0.6061          
+##     P-Value [Acc &gt; NIR] : &lt;2e-16          
+##                                           
+##                   Kappa : 0.8334          
+##                                           
+##  Mcnemar&#39;s Test P-Value : 0.2084          
+##                                           
+##             Sensitivity : 0.9440          
+##             Specificity : 0.8852          
+##          Pos Pred Value : 0.9268          
+##          Neg Pred Value : 0.9114          
+##              Prevalence : 0.6061          
+##          Detection Rate : 0.5722          
+##    Detection Prevalence : 0.6174          
+##       Balanced Accuracy : 0.9146          
+##                                           
+##        &#39;Positive&#39; Class : nonspam         
+## </code></pre>
+</div>
+<div id="helpful-links-for-caret-package" class="section level3">
+<h3>helpful links for <code>caret</code> package</h3>
+<ul>
+<li><p><code>caret</code> tutorials:<br />
+* <a href="http://www.edii.uclm.es/~useR-2013/Tutorials/kuhn/user_caret_2up.pdf" class="uri">http://www.edii.uclm.es/~useR-2013/Tutorials/kuhn/user_caret_2up.pdf</a><br />
+* <a href="http://cran.r-project.org/web/packages/caret/vignettes/caret.pdf" class="uri">http://cran.r-project.org/web/packages/caret/vignettes/caret.pdf</a></p></li>
+<li><p>A paper introducing the <code>caret</code> package:<br />
+* <a href="http://www.jstatsoft.org/v28/i05/paper" class="uri">http://www.jstatsoft.org/v28/i05/paper</a></p></li>
+</ul>
+</div>
+</div>
+<div id="splitting-the-dataset-into-training-testing-sets" class="section level2">
+<h2>Splitting the dataset into training, testing sets</h2>
+<p>It is often useful to set an overall seed for repeatable experiments since most procedures involve random sampling. When you share your model/data with collaborators, they will get the same results.</p>
+<div id="one-time-random-sample" class="section level3">
+<h3>One-time random sample</h3>
+<ul>
+<li>this has been used in the previous example - the original data is split to training and testing sets (you can specify the proportioin in setting the argument <code>p=...</code>)</li>
+</ul>
+<pre class="r"><code>library(caret); library(kernlab); data(spam)
+inTrain&lt;-createDataPartition(y=spam$type, p=0.75, list=FALSE)
+training&lt;-spam[inTrain, ]
+testing&lt;-spam[-inTrain, ]
+dim(training)</code></pre>
+<pre><code>## [1] 3451   58</code></pre>
+</div>
+<div id="k-fold-cross-validation" class="section level3">
+<h3>K fold cross validation</h3>
+<pre class="r"><code>set.seed(13422)
+folds&lt;-createFolds(y=spam$type, k=10, list=TRUE, returnTrain=TRUE) #createFolds is a function in caret package. You supply the variable to be split on in the argument of &quot;y=...&quot;
+sapply(folds, length) #folds is a list and check the length of each of the ten folds</code></pre>
+<pre><code>## Fold01 Fold02 Fold03 Fold04 Fold05 Fold06 Fold07 Fold08 Fold09 Fold10 
+##   4141   4141   4141   4141   4140   4141   4141   4141   4141   4141</code></pre>
+<pre class="r"><code>folds[[1]][1:10] #show the observations actually contained in the first fold. The first ten elements of the first element of the fold&#39;s list correspond to the first ten observations of the sample </code></pre>
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+<pre class="r"><code>## Training set
+dim(spam[folds[[1]], ])</code></pre>
+<pre><code>## [1] 4141   58</code></pre>
+<pre class="r"><code>folds&lt;-createFolds(y=spam$type, k=10, list=TRUE, returnTrain=FALSE) #argument &quot;returnTrain=FALSE&quot; means to return TESTING set 
+
+folds[[1]][1:10] #similarly, you can see the actual observations included in the first test set in k-fold validation</code></pre>
+<pre><code>##  [1] 35 38 44 46 49 51 54 63 71 74</code></pre>
+<pre class="r"><code>## Test set 
+dim(spam[folds[[1]], ])</code></pre>
+<pre><code>## [1] 461  58</code></pre>
+</div>
+<div id="random-resampling-or-bootstrap" class="section level3">
+<h3>Random resampling or Bootstrap</h3>
+<pre class="r"><code>set.seed(432525)
+folds&lt;-createResample(y=spam$type, times=10, list=TRUE) 
+sapply(folds, length)</code></pre>
+<pre><code>## Resample01 Resample02 Resample03 Resample04 Resample05 Resample06 
+##       4601       4601       4601       4601       4601       4601 
+## Resample07 Resample08 Resample09 Resample10 
+##       4601       4601       4601       4601</code></pre>
+<pre class="r"><code>folds[[1]][1:10] #you may see observations repeated because resampling is done with replacement</code></pre>
+<pre><code>##  [1]  2  3  3  3  4  5 12 13 15 17</code></pre>
+</div>
+<div id="time-slices---for-time-series-forecasting" class="section level3">
+<h3>Time slices - for time-series forecasting</h3>
+<pre class="r"><code>set.seed(213432)
+tme&lt;-1:1000
+folds&lt;-createTimeSlices(y=tme, initialWindow=20, horizon=10)
+names(folds)</code></pre>
+<pre><code>## [1] &quot;train&quot; &quot;test&quot;</code></pre>
+<pre class="r"><code>folds$train[[1]] ##continuous from 1 to 20; the argument &quot;initialWindow=20&quot;</code></pre>
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20</code></pre>
+<pre class="r"><code>folds$test[[1]] ##the next 10 for prediction; the argument &quot;horizon=10&quot;</code></pre>
+<pre><code>##  [1] 21 22 23 24 25 26 27 28 29 30</code></pre>
+<pre class="r"><code>#the next slice will shift over accordingly and they are continuous in time</code></pre>
+</div>
+<div id="training-options" class="section level3">
+<h3>Training options</h3>
+<pre class="r"><code>library(caret); library(kernlab); data(spam)
+inTrain&lt;-createDataPartition(y=spam$type, p=0.75, list=FALSE)
+training&lt;-spam[inTrain, ]
+testing&lt;-spam[-inTrain, ]
+
+modelFit&lt;-train(type~., data=training, method=&quot;glm&quot;) #accept defaults
+
+#evaluation metric: for continuous outcome variable, it is RMSE the algorithm tries to minimize. You could use R-squared, more suitable for linear setting; for factor outcome variable, it is the accuracy the algorithm tries to maximize
+?train.default
+
+#allows you to be more precise about the way you train the model; method options are available for all the above discussed methods
+args(trainControl) </code></pre>
+</div>
+</div>
+<div id="exploratory-analysis-of-the-outcome-variable" class="section level2">
+<h2>Exploratory Analysis (of the outcome variable)</h2>
+<p>One key element is to understand how the data actually look and how they interact with each other. Best way to do this is to use plots.</p>
+<p>The below example is from the ISLR package from the book: <em>Introduction to statistical learning</em></p>
+<pre class="r"><code>library(ISLR); library(ggplot2); library(caret); library(Hmisc); library(gridExtra)</code></pre>
+<pre><code>## Loading required package: survival</code></pre>
+<pre><code>## 
+## Attaching package: &#39;survival&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:caret&#39;:
+## 
+##     cluster</code></pre>
+<pre><code>## Loading required package: Formula</code></pre>
+<pre><code>## 
+## Attaching package: &#39;Hmisc&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     format.pval, units</code></pre>
+<pre class="r"><code>data(Wage)
+summary(Wage) </code></pre>
+<pre><code>##       year           age                     maritl           race     
+##  Min.   :2003   Min.   :18.00   1. Never Married: 648   1. White:2480  
+##  1st Qu.:2004   1st Qu.:33.75   2. Married      :2074   2. Black: 293  
+##  Median :2006   Median :42.00   3. Widowed      :  19   3. Asian: 190  
+##  Mean   :2006   Mean   :42.41   4. Divorced     : 204   4. Other:  37  
+##  3rd Qu.:2008   3rd Qu.:51.00   5. Separated    :  55                  
+##  Max.   :2009   Max.   :80.00                                          
+##                                                                        
+##               education                     region    
+##  1. &lt; HS Grad      :268   2. Middle Atlantic   :3000  
+##  2. HS Grad        :971   1. New England       :   0  
+##  3. Some College   :650   3. East North Central:   0  
+##  4. College Grad   :685   4. West North Central:   0  
+##  5. Advanced Degree:426   5. South Atlantic    :   0  
+##                           6. East South Central:   0  
+##                           (Other)              :   0  
+##            jobclass               health      health_ins      logwage     
+##  1. Industrial :1544   1. &lt;=Good     : 858   1. Yes:2083   Min.   :3.000  
+##  2. Information:1456   2. &gt;=Very Good:2142   2. No : 917   1st Qu.:4.447  
+##                                                            Median :4.653  
+##                                                            Mean   :4.654  
+##                                                            3rd Qu.:4.857  
+##                                                            Max.   :5.763  
+##                                                                           
+##       wage       
+##  Min.   : 20.09  
+##  1st Qu.: 85.38  
+##  Median :104.92  
+##  Mean   :111.70  
+##  3rd Qu.:128.68  
+##  Max.   :318.34  
+## </code></pre>
+<pre class="r"><code>inTrain&lt;-createDataPartition(y=Wage$wage, p=0.7, list=FALSE)
+training&lt;-Wage[inTrain, ]
+testing&lt;-Wage[-inTrain, ]
+dim(training); dim(testing)</code></pre>
+<pre><code>## [1] 2102   11</code></pre>
+<pre><code>## [1] 898  11</code></pre>
+<pre class="r"><code>featurePlot(x=training[, c(&quot;age&quot;, &quot;education&quot;, &quot;jobclass&quot;)], y=training$wage, plot=&quot;pairs&quot;) #variables plot against one another</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre class="r"><code>qplot(age, wage, data=training) #two groups</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
+<pre class="r"><code>qplot(age, wage, colour=jobclass, data=training) #color-coded with job class: industrial vs information; high-wage earners mostly belong to the information jobs</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-7-3.png" width="672" /></p>
+<pre class="r"><code>qq&lt;-qplot(age, wage, color=education, data=training)
+qq+geom_smooth(method=&quot;lm&quot;, formula=y~x) #apply a linear smoother on each class of eduction</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-7-4.png" width="672" /></p>
+<pre class="r"><code>cutWage&lt;-cut2(training$wage, g=3) #cut2 in Hmisc package, g argument specified number of groups to be divided; it breaks dataset into factors based on quantile groups
+p1&lt;-qplot(cutWage, age, data=training, fill=cutWage, geom=c(&quot;boxplot&quot;))
+p1</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-7-5.png" width="672" /></p>
+<pre class="r"><code>p2&lt;-qplot(cutWage, age, data=training, fill=cutWage, geom=c(&quot;boxplot&quot;, &quot;jitter&quot;))
+grid.arrange(p1, p2, ncol=2) #generate two plots (boxplot and boxplot with points overlaying on top) side by side; desirable for many points that drive the trend (not obscured by just a few points)</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-7-6.png" width="672" /></p>
+<pre class="r"><code>t1&lt;-table(cutWage, training$jobclass)
+t1</code></pre>
+<pre><code>##                
+## cutWage         1. Industrial 2. Information
+##   [ 20.1, 92.2)           437            264
+##   [ 92.2,118.9)           372            354
+##   [118.9,318.3]           267            408</code></pre>
+<pre class="r"><code>prop.table(t1, 1) #option: 1 is the row and 2 is column percentage</code></pre>
+<pre><code>##                
+## cutWage         1. Industrial 2. Information
+##   [ 20.1, 92.2)     0.6233951      0.3766049
+##   [ 92.2,118.9)     0.5123967      0.4876033
+##   [118.9,318.3]     0.3955556      0.6044444</code></pre>
+<pre class="r"><code>qplot(wage, colour=education, data=training, geom=&quot;density&quot;) #density plot of wages shows double peaks for advanced-degree and college-degree holders, which is not shown in the box-plot. </code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-7-7.png" width="672" /></p>
+<p>A list of things to keep in mind:<br />
+1. make plots only in training set<br />
+2. imbalance in outcomes/predictors * value of predictor almost all in one outcome group and not the other is an indicator that it is a good predictor<br />
+* when outcome value predominently belongs to one group leaving few to the other, it is difficult to build a predictive model<br />
+3. outliers (which may suggest missing variable)<br />
+4. groups of points not explained by a predictor on the graph (suggesting another variable in play)<br />
+5. skewed variables<br />
+* The remedy is to transform the data - make less skewed and more normal in regression model</p>
+</div>
+<div id="preprocess-the-data" class="section level2">
+<h2>Preprocess the data</h2>
+<div id="standardize-the-predictors-and-box-cox-transformation" class="section level3">
+<h3>standardize the predictor(s) and Box-cox transformation</h3>
+<pre class="r"><code>library(caret); library(kernlab); data(spam)
+inTrain &lt;- createDataPartition(y=spam$type, p=0.75, list=FALSE)
+
+training &lt;- spam[inTrain,]
+testing &lt;- spam[-inTrain,]
+
+hist(training$capitalAve, main=&quot;&quot;, xlab=&quot;ave. capital run length&quot;)</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre class="r"><code>mean(training$capitalAve) </code></pre>
+<pre><code>## [1] 4.934781</code></pre>
+<pre class="r"><code>sd(training$capitalAve) #very skewed</code></pre>
+<pre><code>## [1] 32.11576</code></pre>
+<pre class="r"><code>#standardize the variable where the sd is 1 (greatly reduced the skewness)
+trainCapAve&lt;-training$capitalAve
+trainCapAveS&lt;-(trainCapAve-mean(trainCapAve))/sd(trainCapAve)
+mean(trainCapAve)</code></pre>
+<pre><code>## [1] 4.934781</code></pre>
+<pre class="r"><code>## KEY! standardizing in the test set: use only parameters estimated from training set
+testCapAve&lt;-testing$capitalAve
+testCapAveS&lt;-(testCapAve-mean(trainCapAve))/sd(trainCapAve) #the mean and sd will not be 0 and 1
+
+## preProcess function to perform similar functions
+preObj&lt;-preProcess(training[, -58], method=c(&quot;center&quot;, &quot;scale&quot;)) # 58th vbl is the actual outcome
+trainCapAveS&lt;-predict(preObj, training[, -58])$capitalAve
+mean(trainCapAveS); sd(trainCapAveS)</code></pre>
+<pre><code>## [1] 8.287223e-18</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>## value calculated from preObj to apply to the test
+settestCapAveS&lt;-predict(preObj, testing[, -58])$capitalAve 
+mean(testCapAveS); sd(testCapAveS)</code></pre>
+<pre><code>## [1] 0.03198309</code></pre>
+<pre><code>## [1] 0.9509827</code></pre>
+<pre class="r"><code>#Alternatively, use preProcess argument in the train function
+set.seed(32422)
+modelFit&lt;-train(type~., data=training, preProcess=c(&quot;center&quot;, &quot;scale&quot;), method=&quot;glm&quot;)</code></pre>
+<p>Besides centering and scaling, we can use Box-Cox transforms.</p>
+<pre class="r"><code>##take continuous data and try to make them look more normal (use maximum likelihood)
+preObj&lt;-preProcess(training[, -58], method=c(&quot;BoxCox&quot;)) 
+trainCapAveS&lt;-predict(preObj, training[, -58])$capitalAve
+
+par(mfrow=c(1, 2)); hist(trainCapAveS); qqnorm(trainCapAveS) #success depends on the data quirks</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+<div id="impute-the-missing-values" class="section level3">
+<h3>Impute the missing values</h3>
+<pre class="r"><code>set.seed(342435)
+
+#make some values NA
+training$capAve&lt;-training$capitalAve
+selectNA&lt;-rbinom(dim(training)[1], size=1, prob=0.05)==1
+training$capAve[selectNA]&lt;-NA
+
+#impute 
+preObj&lt;-preProcess(training[, -58], method=&quot;knnImpute&quot;) #knn - k nearest neighbour
+capAve&lt;-predict(preObj, training[, -58])$capAve
+
+#standardize true values
+capAveTruth&lt;-training$capitalAve
+capAveTruth&lt;-(capAveTruth-mean(capAveTruth))/sd(capAveTruth)
+
+#check if the imputation is good 
+quantile(capAve-capAveTruth) #if good, shall be close to zero</code></pre>
+<pre><code>##           0%          25%          50%          75%         100% 
+## -9.173999693 -0.007212467 -0.003707831  0.003725649  5.423299330</code></pre>
+<pre class="r"><code>quantile((capAve-capAveTruth)[selectNA]) #more variation in the comparison between imputed and true values</code></pre>
+<pre><code>##           0%          25%          50%          75%         100% 
+## -9.173999693 -0.013512596  0.001392659  0.019212542  1.238772782</code></pre>
+<pre class="r"><code>quantile((capAve-capAveTruth)[!selectNA])</code></pre>
+<pre><code>##           0%          25%          50%          75%         100% 
+## -0.009996939 -0.007094084 -0.003831146  0.003317473  5.423299330</code></pre>
+</div>
+<div id="near-collinearity-predictors" class="section level3">
+<h3>Near collinearity predictor(s)</h3>
+<pre class="r"><code>library(ISLR); library(caret); data(Wage)
+inTrain&lt;-createDataPartition(y=Wage$wage, p=0.7, list=FALSE)
+training&lt;-Wage[inTrain, ]; testing&lt;-Wage[-inTrain, ]
+
+## turn factor/qualitative vbl to dummy/indicator vbl
+table(training$jobclass) #two types: Industrail vs Information</code></pre>
+<pre><code>## 
+##  1. Industrial 2. Information 
+##           1080           1022</code></pre>
+<pre class="r"><code>dummies&lt;-dummyVars(wage~ jobclass, data=training) #dummyVar in caret package
+head(predict(dummies, newdata=training)) #creates two dummy variables</code></pre>
+<pre><code>##        jobclass.1. Industrial jobclass.2. Information
+## 231655                      1                       0
+## 161300                      1                       0
+## 155159                      0                       1
+## 11443                       0                       1
+## 376662                      0                       1
+## 302778                      0                       1</code></pre>
+<pre class="r"><code>nsv&lt;-nearZeroVar(training, saveMetrics=TRUE) #can drop the nzv column with true values: near-zero-variable 
+
+#identify the index location of nearZeroVar variables and drop them right away
+nsv&lt;-nearZeroVar(training)
+train.data&lt;-training[, -nsv]
+dim(train.data)</code></pre>
+<pre><code>## [1] 2102   10</code></pre>
+<pre class="r"><code>## spline basis
+library(splines)
+bsBasis&lt;-bs(training$age, df=3) #up to cubic relation of predictor to outcome; bs is the basis function
+
+lm1&lt;-lm(wage~bsBasis, data=training)
+plot(training$age, training$wage, pch=19, cex=0.5)
+points(training$age, predict(lm1, newdata=training), col=&quot;red&quot;, pch=19, cex=0.5)</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<pre class="r"><code>## splines on the test set
+prediction1&lt;-predict(bsBasis, age=testing$age) ## VERY IMPORTANT: use the calculated parameters in the training set and apply to vbls to be transformed in test set</code></pre>
+</div>
+<div id="principal-components-analysis-pca" class="section level3">
+<h3>Principal Components Analysis (PCA)</h3>
+<p>The goal is to capture as much variation as possible (you can specify the proportion of variation explained for selecting number of variables) with fewer variables. After transformation, we use a (linear) combination of the original predictors.</p>
+<pre class="r"><code>library(caret); library(kernlab); data(spam)
+inTrain&lt;-createDataPartition(y=spam$type, p=0.75, list=FALSE)
+
+training&lt;-spam[inTrain, ]
+testing&lt;-spam[-inTrain, ]
+
+M&lt;-abs(cor(training[, -58])) #abs of the correlation of vbl pairs
+diag(M)&lt;-0 #not interested in vbl in itself s ince they are all 1
+which(M&gt;0.8, arr.ind=T) #display vbls</code></pre>
+<pre><code>##        row col
+## num415  34  32
+## direct  40  32
+## num857  32  34
+## direct  40  34
+## num857  32  40
+## num415  34  40</code></pre>
+<pre class="r"><code>names(spam)[c(34, 32)]</code></pre>
+<pre><code>## [1] &quot;num415&quot; &quot;num857&quot;</code></pre>
+<pre class="r"><code>plot(spam[, 34], spam[, 32])</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<pre class="r"><code>#in essense is to use weighted combination of predictors
+#benefits: reduce number of predictors and reduce noise
+
+## one possibility
+X&lt;-0.71*training$num415+0.71*training$num857
+Y&lt;-0.71*training$num415-0.71*training$num857
+plot(X, Y) #variation concentrates on X</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-12-2.png" width="672" /></p>
+<pre class="r"><code>## find a new set of multivariate vbls that are uncorrelated and explain as much var as possible (statistical); and then put all the vbls together in one matrix and find the best matrix created with fewer variables (lower rank) that explains the original data (data compression)
+
+# SVD (singular value decomposition)
+# PCA - the right singular values if you first scale the vbls (normalize)
+
+smallSpam&lt;-spam[, c(34, 32)]
+prComp&lt;-prcomp(smallSpam)
+plot(prComp$x[, 1], prComp$x[, 2]) #very similar to the previous plot; extendable to multivariates</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-12-3.png" width="672" /></p>
+<pre class="r"><code>prComp$rotation #explains how the weights from the previous exercise are obtained</code></pre>
+<pre><code>##              PC1        PC2
+## num415 0.7080625  0.7061498
+## num857 0.7061498 -0.7080625</code></pre>
+<pre class="r"><code>#PCA extends to the entire dataset 
+typeColor&lt;-((spam$type==&quot;spam&quot;)*1+1)
+prComp&lt;-prcomp(log10(spam[, -58]+1)) #transform skewed vbls to be more Gaussian
+plot(prComp$x[, 1], prComp$x[, 2], col=typeColor, xlab=&quot;PC1&quot;, ylab=&quot;PC2&quot;)</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-12-4.png" width="672" /></p>
+<pre class="r"><code>## plot the variance explained by different number of PCAs
+prComp&lt;-prcomp(training[, -58], scale.=TRUE)
+std_dev&lt;-prComp$sdev
+pr_var&lt;-std_dev^2
+prop_varex&lt;-pr_var/sum(pr_var)
+sum(prop_varex[1:48])</code></pre>
+<pre><code>## [1] 0.953784</code></pre>
+<pre class="r"><code>plot(cumsum(prop_varex), xlab=&quot;Principal Component&quot;, ylab=&quot;Cumulative Proportioin of Variance Explained&quot;, type=&quot;b&quot;)
+abline(h=0.95, col=&quot;red&quot;, v=48)</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-12-5.png" width="672" /></p>
+<pre class="r"><code>## Do it in Caret: 
+#PCA with caret where you specify the number of principal components to be 2
+preProc&lt;-preProcess(log10(spam[, -58]+1), method=&quot;pca&quot;, pcaComp=2)
+spamPC&lt;-predict(preProc, log10(spam[, -58]+1))
+plot(spamPC[, 1], spamPC[, 2], col=typeColor)</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-12-6.png" width="672" /></p>
+<pre class="r"><code>## training set and then test set
+preProc&lt;-preProcess(log10(training[, -58]+1), method=&quot;pca&quot;, pcaComp=2)
+trainPC&lt;-predict(preProc, log10(training[, -58]+1))
+#modelFit&lt;-train(training$type~., method=&quot;glm&quot;, data=trainPC)
+modelFit &lt;- train(x = trainPC, y = training$type,method=&quot;glm&quot;)
+
+testPC&lt;-predict(preProc, log10(testing[, -58]+1))
+confusionMatrix(testing$type, predict(modelFit, testPC))</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction nonspam spam
+##    nonspam     656   41
+##    spam         86  367
+##                                         
+##                Accuracy : 0.8896        
+##                  95% CI : (0.87, 0.9071)
+##     No Information Rate : 0.6452        
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16     
+##                                         
+##                   Kappa : 0.7646        
+##                                         
+##  Mcnemar&#39;s Test P-Value : 9.447e-05     
+##                                         
+##             Sensitivity : 0.8841        
+##             Specificity : 0.8995        
+##          Pos Pred Value : 0.9412        
+##          Neg Pred Value : 0.8102        
+##              Prevalence : 0.6452        
+##          Detection Rate : 0.5704        
+##    Detection Prevalence : 0.6061        
+##       Balanced Accuracy : 0.8918        
+##                                         
+##        &#39;Positive&#39; Class : nonspam       
+## </code></pre>
+<pre class="r"><code>#alternative which combines the PreProcess and predict functions
+modelFit&lt;-train(type~., method=&quot;glm&quot;, preProcess=&quot;pca&quot;, data=training)
+#modelFit &lt;- train(x = trainPC, y = training$type,method=&quot;glm&quot;, preProcess=&quot;pca&quot;)
+confusionMatrix(testing$type, predict(modelFit, testing))</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction nonspam spam
+##    nonspam     665   32
+##    spam         54  399
+##                                           
+##                Accuracy : 0.9252          
+##                  95% CI : (0.9085, 0.9398)
+##     No Information Rate : 0.6252          
+##     P-Value [Acc &gt; NIR] : &lt; 2e-16         
+##                                           
+##                   Kappa : 0.842           
+##                                           
+##  Mcnemar&#39;s Test P-Value : 0.02354         
+##                                           
+##             Sensitivity : 0.9249          
+##             Specificity : 0.9258          
+##          Pos Pred Value : 0.9541          
+##          Neg Pred Value : 0.8808          
+##              Prevalence : 0.6252          
+##          Detection Rate : 0.5783          
+##    Detection Prevalence : 0.6061          
+##       Balanced Accuracy : 0.9253          
+##                                           
+##        &#39;Positive&#39; Class : nonspam         
+## </code></pre>
+<p>PCA most useful for linear-type models, but it can be hard to interpret predictors. Watch out for outliers - look at exploratory plots and transform with logs/Box Cox first. ## Predicting with regression models</p>
+</div>
+<div id="simple-linear-regression-one-predictor" class="section level3">
+<h3>Simple Linear Regression (one predictor)</h3>
+<pre class="r"><code>library(caret); data(faithful); set.seed(333)
+inTrain&lt;-createDataPartition(y=faithful$waiting, p=0.5, list=FALSE)
+trainFaith&lt;-faithful[inTrain, ]; testFaith&lt;-faithful[-inTrain, ]
+head(trainFaith)</code></pre>
+<pre><code>##    eruptions waiting
+## 3      3.333      74
+## 6      2.883      55
+## 7      4.700      88
+## 8      3.600      85
+## 9      1.950      51
+## 11     1.833      54</code></pre>
+<pre class="r"><code>lm1&lt;-lm(eruptions~waiting, data=trainFaith)
+summary(lm1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = eruptions ~ waiting, data = trainFaith)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.13375 -0.36778  0.06064  0.36578  0.96057 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -1.648629   0.226603  -7.275 2.55e-11 ***
+## waiting      0.072211   0.003136  23.026  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.4941 on 135 degrees of freedom
+## Multiple R-squared:  0.7971, Adjusted R-squared:  0.7956 
+## F-statistic: 530.2 on 1 and 135 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>plot(trainFaith$waiting, trainFaith$eruptions, pch=19, col=&quot;blue&quot;, xlab=&quot;Waiting&quot;, ylab=&quot;Duration&quot;)
+lines(trainFaith$waiting, lm1$fitted, lwd=3)</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<pre class="r"><code>#make a prediction with specific wait time = 80 
+coef(lm1)[1]+coef(lm1)[2]*80</code></pre>
+<pre><code>## (Intercept) 
+##    4.128276</code></pre>
+<pre class="r"><code>#prediction alternative: give a new data frame
+newdata&lt;-data.frame(waiting=80) 
+predict(lm1, newdata) #newdata need to be dataframe</code></pre>
+<pre><code>##        1 
+## 4.128276</code></pre>
+<pre class="r"><code>## Plot predictions - training and test
+par(mfrow=c(1, 2))
+plot(trainFaith$waiting, trainFaith$eruptions, pch=19, col=&quot;blue&quot;, xlab=&quot;Waiting&quot;, ylab=&quot;Duration&quot;)
+lines(trainFaith$waiting, predict(lm1), lwd=3)
+plot(testFaith$waiting, testFaith$eruptions, pch=19, col=&quot;blue&quot;, xlab=&quot;Waiting&quot;, ylab=&quot;Duration&quot;)
+lines(testFaith$waiting, predict(lm1, newdata=testFaith), lwd=3)</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-13-2.png" width="672" /></p>
+<pre class="r"><code>#Prediction accuracy: calculate the RMSE on training
+sqrt(sum((lm1$fitted-trainFaith$eruptions)^2)) #5.75</code></pre>
+<pre><code>## [1] 5.740844</code></pre>
+<pre class="r"><code>sqrt(sum((predict(lm1, newdata=testFaith)-testFaith$eruptions)^2)) #5.84 (almost always larger)</code></pre>
+<pre><code>## [1] 5.853745</code></pre>
+<pre class="r"><code>#prediction intervals
+pred1&lt;-predict(lm1, newdata=testFaith, interval=&quot;prediction&quot;)
+ord&lt;-order(testFaith$waiting)
+plot(testFaith$waiting, testFaith$eruptions, pch=19, col=&quot;blue&quot;)
+matlines(testFaith$waiting[ord], pred1[ord, ], type=&quot;l&quot;, col=c(1,2,2), lty=c(1,1,1), lwd=3)
+
+## same process with caret
+modFit&lt;-train(eruptions ~ waiting, data=trainFaith, method=&quot;lm&quot;)
+summary(modFit$finalModel)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = .outcome ~ ., data = dat)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.13375 -0.36778  0.06064  0.36578  0.96057 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -1.648629   0.226603  -7.275 2.55e-11 ***
+## waiting      0.072211   0.003136  23.026  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.4941 on 135 degrees of freedom
+## Multiple R-squared:  0.7971, Adjusted R-squared:  0.7956 
+## F-statistic: 530.2 on 1 and 135 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-13-3.png" width="672" /></p>
+</div>
+<div id="multiple-linear-regression" class="section level3">
+<h3>Multiple Linear Regression</h3>
+<pre class="r"><code>library(ISLR); library(ggplot2); library(caret); 
+data(Wage); Wage&lt;-subset(Wage, select=-c(logwage)) #select out the variable we try to predict
+summary(Wage)</code></pre>
+<pre><code>##       year           age                     maritl           race     
+##  Min.   :2003   Min.   :18.00   1. Never Married: 648   1. White:2480  
+##  1st Qu.:2004   1st Qu.:33.75   2. Married      :2074   2. Black: 293  
+##  Median :2006   Median :42.00   3. Widowed      :  19   3. Asian: 190  
+##  Mean   :2006   Mean   :42.41   4. Divorced     : 204   4. Other:  37  
+##  3rd Qu.:2008   3rd Qu.:51.00   5. Separated    :  55                  
+##  Max.   :2009   Max.   :80.00                                          
+##                                                                        
+##               education                     region    
+##  1. &lt; HS Grad      :268   2. Middle Atlantic   :3000  
+##  2. HS Grad        :971   1. New England       :   0  
+##  3. Some College   :650   3. East North Central:   0  
+##  4. College Grad   :685   4. West North Central:   0  
+##  5. Advanced Degree:426   5. South Atlantic    :   0  
+##                           6. East South Central:   0  
+##                           (Other)              :   0  
+##            jobclass               health      health_ins  
+##  1. Industrial :1544   1. &lt;=Good     : 858   1. Yes:2083  
+##  2. Information:1456   2. &gt;=Very Good:2142   2. No : 917  
+##                                                           
+##                                                           
+##                                                           
+##                                                           
+##                                                           
+##       wage       
+##  Min.   : 20.09  
+##  1st Qu.: 85.38  
+##  Median :104.92  
+##  Mean   :111.70  
+##  3rd Qu.:128.68  
+##  Max.   :318.34  
+## </code></pre>
+<pre class="r"><code>#separate dataset into training and testing set
+inTrain&lt;-createDataPartition(y=Wage$wage, p=0.7, list=FALSE)
+training&lt;-Wage[inTrain, ]; testing&lt;-Wage[-inTrain, ]
+dim(training); dim(testing)</code></pre>
+<pre><code>## [1] 2102   10</code></pre>
+<pre><code>## [1] 898  10</code></pre>
+<pre class="r"><code>#Feature plot
+featurePlot(x=training[, c(&quot;age&quot;, &quot;education&quot;, &quot;jobclass&quot;)], y=training$wage, plot=&quot;pairs&quot;)</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<pre class="r"><code># plot age vs wage
+qplot(age, wage, data=training) #seems to be two groups and need to figure out what variable may explain the difference</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-14-2.png" width="672" /></p>
+<pre class="r"><code>qplot(age, wage, colour=jobclass, data=training)</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-14-3.png" width="672" /></p>
+<pre class="r"><code>qplot(age, wage, colour=education, data=training) #both seem to have explanatory power</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-14-4.png" width="672" /></p>
+<pre class="r"><code># fit a linear model
+modFit&lt;-train(wage~age+jobclass+education, method=&quot;lm&quot;, data=training) #by default, the factor variables automatically changed to dummy/indicator variables
+finMod&lt;-modFit$finalModel
+print(modFit)</code></pre>
+<pre><code>## Linear Regression 
+## 
+## 2102 samples
+##    3 predictor
+## 
+## No pre-processing
+## Resampling: Bootstrapped (25 reps) 
+## Summary of sample sizes: 2102, 2102, 2102, 2102, 2102, 2102, ... 
+## Resampling results:
+## 
+##   RMSE      Rsquared   MAE     
+##   35.56759  0.2589245  24.87554
+## 
+## Tuning parameter &#39;intercept&#39; was held constant at a value of TRUE</code></pre>
+<pre class="r"><code># diagnostics
+plot(finMod, 1, pch=19, cex=0.5, col=&quot;#00000010&quot;) #fitted values VS residuals plot - would prefer the line stays at zero</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-14-5.png" width="672" /></p>
+<pre class="r"><code>#color by variables not used in the model to see if outliers can be explained by the variable excluded in the model
+qplot(finMod$fitted, finMod$residuals, colour=race, data=training)</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-14-6.png" width="672" /></p>
+<pre class="r"><code>#plot by (row) index - prefer no trend but if there is, it is likely an omitted variable problem (sth that is rising with a continuous variable like time and age)
+plot(finMod$residuals, pch=19)</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-14-7.png" width="672" /></p>
+<pre class="r"><code>#plot predicted vs truth in the test set - ideally, a 45 degree line (!!! cannot use the insight to update your model)
+pred&lt;-predict(modFit, testing)
+qplot(wage, pred, colour=year, data=testing)</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-14-8.png" width="672" /></p>
+<pre class="r"><code>#use all covariates
+modFitAll&lt;-train(wage~., data=training, method=&quot;lm&quot;)
+pred&lt;-predict(modFitAll, testing)
+qplot(wage, pred, data=testing)</code></pre>
+<p><img src="Week2_notes_files/figure-html/unnamed-chunk-14-9.png" width="672" /></p>
+</div>
+</div>
+
+<p>Copyright &copy; 2019 Cathy Gao at cathygao.2019@outlook.com.</p>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Week4_notes</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Class Material</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Practical Machine Learning</a>
+</li>
+<li>
+  <a href="https://cathydatascience.github.io/PracticalMachineLearning_Project/">Project Paper</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Notes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Week1_notes.html">Week 1</a>
+    </li>
+    <li>
+      <a href="Week2_notes.html">Week 2</a>
+    </li>
+    <li>
+      <a href="Week3_notes.html">Week 3</a>
+    </li>
+    <li>
+      <a href="Week4_notes.html">Week 4</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Quizzes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Week2quiz_codes.html">Week 2</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="Week3quiz_codes.html">Week 3</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="Week4quiz_codes.html">Week 4</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="http://cathydatascience.github.io/showprojectsonline">
+    <span class="fa fa-question fa-lg"></span>
+     
+    How to publish project paper(s) online
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Week4_notes</h1>
+
+</div>
+
+
+<div id="key-wordsconcepts-of-week-4" class="section level2">
+<h2>Key Words/Concepts of Week 4</h2>
+<ul>
+<li>Dealing with high-dimensional data
+<ul>
+<li>Hard thresholding</li>
+<li>Regularized Regressions
+<ul>
+<li>Ridge Regression</li>
+<li>Lasso</li>
+</ul></li>
+</ul></li>
+<li>Combined models to improve predictive power - model stacking</li>
+<li>basic time-series forecasting
+<ul>
+<li>read data from r package <code>quantmod</code></li>
+<li>decompose trend, seasonal and cyclical componenet from the data</li>
+<li>construct moving averages
+<ul>
+<li>simple moving average</li>
+<li>exponential moving average</li>
+</ul></li>
+</ul></li>
+<li>Unsupervised prediction - no type categorization of the outcome variable</li>
+</ul>
+</div>
+<div id="dealing-with-high-dimensional-data" class="section level2">
+<h2>Dealing with High-dimensional Data</h2>
+<div id="a-motivating-example" class="section level3">
+<h3>A motivating example</h3>
+<p><span class="math display">\[Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \epsilon\]</span></p>
+<p>where <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span> are nearly perfectly correlated (co-linear). You can approximate this model by:</p>
+<p><span class="math display">\[Y = \beta_0 + (\beta_1 + \beta_2)X_1 + \epsilon\]</span></p>
+<p>The result is: * You will get a good estimate of <span class="math inline">\(Y\)</span><br />
+* The estimate (of <span class="math inline">\(Y\)</span>) will be biased<br />
+* We may reduce variance in the estimate</p>
+<p>It is essentially a tradeoff between reduced variance and biased estimates.</p>
+</div>
+<div id="key-idea-of-regularized-regressions" class="section level3">
+<h3>Key idea of regularized regressions</h3>
+<ol style="list-style-type: decimal">
+<li>Fit a regression model</li>
+<li>Penalize (or shrink) large coefficients</li>
+</ol>
+<p><strong>Pros:</strong> * Can help with the bias/variance tradeoff when predictors are almost co-linear * Can help with model selection when lasso technique</p>
+<p><strong>Cons:</strong> * May be computationally demanding on large data sets<br />
+* Does not perform as well as random forests and boosting</p>
+</div>
+<div id="prostate-cancer-example" class="section level3">
+<h3>Prostate cancer example</h3>
+<div id="a-common-pattern-of-rss-as-we-include-more-predictors-in-the-model-overfitting-in-the-training-set-and-kind-of-u-shape-in-testing-set" class="section level4">
+<h4>A common pattern of RSS as we include more predictors in the model: overfitting in the training set and (kind of) U-shape in testing set</h4>
+<p><a href="http://www.cbcb.umd.edu/~hcorrada/PracticalML/src/selection.R">Code here</a></p>
+<pre class="r"><code>library(ElemStatLearn); data(prostate)
+str(prostate)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    97 obs. of  10 variables:
+##  $ lcavol : num  -0.58 -0.994 -0.511 -1.204 0.751 ...
+##  $ lweight: num  2.77 3.32 2.69 3.28 3.43 ...
+##  $ age    : int  50 58 74 58 62 50 64 58 47 63 ...
+##  $ lbph   : num  -1.39 -1.39 -1.39 -1.39 -1.39 ...
+##  $ svi    : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ lcp    : num  -1.39 -1.39 -1.39 -1.39 -1.39 ...
+##  $ gleason: int  6 6 7 6 6 6 6 6 6 6 ...
+##  $ pgg45  : int  0 0 20 0 0 0 0 0 0 0 ...
+##  $ lpsa   : num  -0.431 -0.163 -0.163 -0.163 0.372 ...
+##  $ train  : logi  TRUE TRUE TRUE TRUE TRUE TRUE ...</code></pre>
+<pre class="r"><code># regression subset selection in the prostate dataset
+library(ElemStatLearn)
+data(prostate)
+
+covnames &lt;- names(prostate[-(9:10)])
+y &lt;- prostate$lpsa
+x &lt;- prostate[,covnames]
+
+form &lt;- as.formula(paste(&quot;lpsa~&quot;, paste(covnames, collapse=&quot;+&quot;), sep=&quot;&quot;))
+summary(lm(form, data=prostate[prostate$train,]))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = form, data = prostate[prostate$train, ])
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.64870 -0.34147 -0.05424  0.44941  1.48675 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.429170   1.553588   0.276  0.78334    
+## lcavol       0.576543   0.107438   5.366 1.47e-06 ***
+## lweight      0.614020   0.223216   2.751  0.00792 ** 
+## age         -0.019001   0.013612  -1.396  0.16806    
+## lbph         0.144848   0.070457   2.056  0.04431 *  
+## svi          0.737209   0.298555   2.469  0.01651 *  
+## lcp         -0.206324   0.110516  -1.867  0.06697 .  
+## gleason     -0.029503   0.201136  -0.147  0.88389    
+## pgg45        0.009465   0.005447   1.738  0.08755 .  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.7123 on 58 degrees of freedom
+## Multiple R-squared:  0.6944, Adjusted R-squared:  0.6522 
+## F-statistic: 16.47 on 8 and 58 DF,  p-value: 2.042e-12</code></pre>
+<pre class="r"><code>set.seed(1)
+train.ind &lt;- sample(nrow(prostate), ceiling(nrow(prostate))/2)
+y.test &lt;- prostate$lpsa[-train.ind]
+x.test &lt;- x[-train.ind,]
+
+y &lt;- prostate$lpsa[train.ind]
+x &lt;- x[train.ind,]
+
+p &lt;- length(covnames)
+rss &lt;- list()
+for (i in 1:p) {
+  cat(i)
+  Index &lt;- combn(p,i)
+
+  rss[[i]] &lt;- apply(Index, 2, function(is) {
+    form &lt;- as.formula(paste(&quot;y~&quot;, paste(covnames[is], collapse=&quot;+&quot;), sep=&quot;&quot;))
+    isfit &lt;- lm(form, data=x)
+    yhat &lt;- predict(isfit)
+    train.rss &lt;- sum((y - yhat)^2)
+
+    yhat &lt;- predict(isfit, newdata=x.test)
+    test.rss &lt;- sum((y.test - yhat)^2)
+    c(train.rss, test.rss)
+  })
+}</code></pre>
+<pre><code>## 12345678</code></pre>
+<pre class="r"><code>plot(1:p, 1:p, type=&quot;n&quot;, ylim=range(unlist(rss)), xlim=c(0,p), xlab=&quot;number of predictors&quot;, ylab=&quot;residual sum of squares&quot;, main=&quot;Prostate cancer data&quot;)
+for (i in 1:p) {
+  points(rep(i-0.15, ncol(rss[[i]])), rss[[i]][1, ], col=&quot;blue&quot;)
+  points(rep(i+0.15, ncol(rss[[i]])), rss[[i]][2, ], col=&quot;red&quot;)
+}
+minrss &lt;- sapply(rss, function(x) min(x[1,]))
+lines((1:p)-0.15, minrss, col=&quot;blue&quot;, lwd=1.7)
+minrss &lt;- sapply(rss, function(x) min(x[2,]))
+lines((1:p)+0.15, minrss, col=&quot;red&quot;, lwd=1.7)
+legend(&quot;topright&quot;, c(&quot;Train&quot;, &quot;Test&quot;), col=c(&quot;blue&quot;, &quot;red&quot;), pch=1)</code></pre>
+<p><img src="Week4_notes_files/figure-html/prostate-1.png" width="672" /></p>
+</div>
+<div id="hard-thresholding" class="section level4">
+<h4>Hard thresholding</h4>
+<p>When the predictors are plenty and the observations are not enough, some coefficient estimates will be set to zero in order to carry out the calculation.</p>
+<p>The idea is to pick the number of predictor estimates to be zero and then figure out what predictor values should not be made zero. Solve:</p>
+</div>
+<div id="regularized-regression" class="section level4">
+<h4>Regularized regression</h4>
+<p>In the precense of high collinearity, coefficient estimates tend to be large (a sign of unreliability). We may regularize/shrink the coefficients.</p>
+<p><span class="math display">\[ PRSS(\beta) = \sum_{j=1}^n (Y_j - \sum_{i=1}^m \beta_{1i} X_{ij})^2 + P(\lambda; \beta)\]</span></p>
+<p>where <span class="math inline">\(PRSS\)</span> is a penalized form of the sum of squares. Things that are commonly looked for * Penalty reduces complexity<br />
+* Penalty reduces variance<br />
+* Penalty respects structure of the problem</p>
+<div id="ridge-regression" class="section level5">
+<h5>Ridge regression</h5>
+<p><span class="math display">\[ \sum_{i=1}^N \left(y_i - \beta_0 + \sum_{j=1}^p x_{ij}\beta_j \right)^2 + \lambda \sum_{j=1}^p \beta_j^2\]</span></p>
+<p>equivalent to solving</p>
+<p><span class="math inline">\(\sum_{i=1}^N \left(y_i - \beta_0 + \sum_{j=1}^p x_{ij}\beta_j \right)^2\)</span> subject to <span class="math inline">\(\sum_{j=1}^p \beta_j^2 \leq s\)</span> where <span class="math inline">\(s\)</span> is inversely proportional to <span class="math inline">\(\lambda\)</span></p>
+<p>The advantage here is even in high-dimension data that <span class="math inline">\(X&#39;X\)</span> is not invertible, ridge regression can still be fit by including <span class="math inline">\(\lambda\)</span>.</p>
+<p>When <span class="math inline">\(\lambda\)</span> is zero, we have the OLS estimates. When <span class="math inline">\(\lambda\)</span> approaches infinity, all the <span class="math inline">\(\beta s\)</span> will converge to zero.</p>
+<pre class="r"><code>library(MASS)
+lambdas &lt;- seq(0,50,len=10) #10 lambdas that go up in value
+M &lt;- length(lambdas) 
+train.rss &lt;- rep(0,M) 
+test.rss &lt;- rep(0,M)     
+betas &lt;- matrix(0,ncol(x), M) #each column to store coefficient estimates for each lambda
+
+#estimation and storing results
+for(i in 1:M){
+  Formula &lt;-as.formula(paste(&quot;y~&quot;,paste(covnames,collapse=&quot;+&quot;),sep=&quot;&quot;)) #use the full model on all lambdas
+  fit1 &lt;- lm.ridge(Formula,data=x,lambda=lambdas[i])
+  betas[,i] &lt;- fit1$coef
+  
+  scaledX &lt;- sweep(as.matrix(x),2,fit1$xm)
+  scaledX &lt;- sweep(scaledX,2,fit1$scale,&quot;/&quot;)
+  yhat &lt;- scaledX%*%fit1$coef+fit1$ym
+  train.rss[i] &lt;- sum((y - yhat)^2)
+  
+  scaledX &lt;- sweep(as.matrix(x.test),2,fit1$xm)
+  scaledX &lt;- sweep(scaledX,2,fit1$scale,&quot;/&quot;)
+  yhat &lt;- scaledX%*%fit1$coef+fit1$ym
+  test.rss[i] &lt;- sum((y.test - yhat)^2)
+}
+
+#plots of RSS on the training and test sets, and coefficients
+plot(lambdas,test.rss,type=&quot;l&quot;,col=&quot;red&quot;,lwd=2,ylab=&quot;RSS&quot;,ylim=range(train.rss,test.rss))
+lines(lambdas,train.rss,col=&quot;blue&quot;,lwd=2,lty=2)
+best.lambda &lt;- lambdas[which.min(test.rss)]
+abline(v=best.lambda+1/9)</code></pre>
+<p><img src="Week4_notes_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<pre class="r"><code>plot(lambdas,betas[1,],ylim=range(betas),type=&quot;n&quot;,ylab=&quot;Coefficients&quot;)
+for(i in 1:ncol(x))
+  lines(lambdas,betas[i,],type=&quot;b&quot;,lty=i,pch=as.character(i))
+abline(h=0)
+legend(&quot;topright&quot;,covnames,pch=as.character(1:8))
+legend(30,30,c(&quot;Train&quot;,&quot;Test&quot;),col=c(&quot;blue&quot;,&quot;red&quot;),lty=c(2,1))</code></pre>
+<p><img src="Week4_notes_files/figure-html/unnamed-chunk-1-2.png" width="672" /></p>
+<p>From the ridge coefficient paths, we see that as lambda rises (more penality being placed on coefficients), coefficients go towards zero. When lambda is zero, it is just the least square regression estimates.</p>
+</div>
+<div id="lasso" class="section level5">
+<h5>Lasso</h5>
+<p><span class="math inline">\(\sum_{i=1}^N \left(y_i - \beta_0 - \sum_{j=1}^p x_{ij}\beta_j \right)^2\)</span> subject to <span class="math inline">\(\sum_{j=1}^p |\beta_j| \leq s\)</span></p>
+<p>It also has a lagrangian form:</p>
+<p><span class="math display">\[ \sum_{i=1}^N \left(y_i - \beta_0 - \sum_{j=1}^p x_{ij}\beta_j \right)^2 + \lambda \sum_{j=1}^p |\beta_j|\]</span> For <strong>orthonormal design matrices (not the norm!)</strong> this has a closed form solution:</p>
+<p><span class="math display">\[\hat{\beta}_j = sign(\hat{\beta}_j^0)(|\hat{\beta}_j^0| - \gamma)^{+}\]</span> Although the above result is not general, some prefer it because it helps with model selection when some <span class="math inline">\(\beta s\)</span> are set to zero.</p>
+<pre class="r"><code>library(lars)</code></pre>
+<pre><code>## Loaded lars 1.2</code></pre>
+<pre class="r"><code>lasso.fit &lt;- lars(as.matrix(x), y, type=&quot;lasso&quot;, trace=TRUE)</code></pre>
+<pre><code>## LASSO sequence
+## Computing X&#39;X .....
+## LARS Step 1 :     Variable 1     added
+## LARS Step 2 :     Variable 5     added
+## LARS Step 3 :     Variable 8     added
+## LARS Step 4 :     Variable 2     added
+## LARS Step 5 :     Variable 4     added
+## LARS Step 6 :     Variable 6     added
+## LARS Step 7 :     Variable 3     added
+## LARS Step 8 :     Variable 7     added
+## Computing residuals, RSS etc .....</code></pre>
+<pre class="r"><code>plot(lasso.fit, breaks=FALSE)
+legend(&quot;topleft&quot;, covnames, pch=8, lty=1:length(covnames), col=1:length(covnames))</code></pre>
+<p><img src="Week4_notes_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code># this plots the cross validation curve
+lasso.cv &lt;- cv.lars(as.matrix(x), y, K=10, type=&quot;lasso&quot;, trace=TRUE)</code></pre>
+<pre><code>## LASSO sequence
+## Computing X&#39;X .....
+## LARS Step 1 :     Variable 1     added
+## LARS Step 2 :     Variable 5     added
+## LARS Step 3 :     Variable 8     added
+## LARS Step 4 :     Variable 2     added
+## LARS Step 5 :     Variable 4     added
+## LARS Step 6 :     Variable 3     added
+## LARS Step 7 :     Variable 6     added
+## LARS Step 8 :     Variable 7     added
+## Lasso Step 9 :    Variable 3     dropped
+## LARS Step 10 :    Variable 3     added
+## Computing residuals, RSS etc .....
+## 
+##  CV Fold 1 
+## 
+## LASSO sequence
+## Computing X&#39;X .....
+## LARS Step 1 :     Variable 1     added
+## LARS Step 2 :     Variable 5     added
+## LARS Step 3 :     Variable 2     added
+## LARS Step 4 :     Variable 7     added
+## LARS Step 5 :     Variable 4     added
+## LARS Step 6 :     Variable 6     added
+## LARS Step 7 :     Variable 8     added
+## LARS Step 8 :     Variable 3     added
+## Computing residuals, RSS etc .....
+## 
+##  CV Fold 2 
+## 
+## LASSO sequence
+## Computing X&#39;X .....
+## LARS Step 1 :     Variable 1     added
+## LARS Step 2 :     Variable 5     added
+## LARS Step 3 :     Variable 2     added
+## LARS Step 4 :     Variable 8     added
+## LARS Step 5 :     Variable 4     added
+## LARS Step 6 :     Variable 6     added
+## LARS Step 7 :     Variable 3     added
+## LARS Step 8 :     Variable 7     added
+## Computing residuals, RSS etc .....
+## 
+##  CV Fold 3 
+## 
+## LASSO sequence
+## Computing X&#39;X .....
+## LARS Step 1 :     Variable 1     added
+## LARS Step 2 :     Variable 8     added
+## LARS Step 3 :     Variable 2     added
+## LARS Step 4 :     Variable 5     added
+## LARS Step 5 :     Variable 4     added
+## LARS Step 6 :     Variable 6     added
+## LARS Step 7 :     Variable 3     added
+## LARS Step 8 :     Variable 7     added
+## Computing residuals, RSS etc .....
+## 
+##  CV Fold 4 
+## 
+## LASSO sequence
+## Computing X&#39;X .....
+## LARS Step 1 :     Variable 1     added
+## LARS Step 2 :     Variable 5     added
+## LARS Step 3 :     Variable 2     added
+## LARS Step 4 :     Variable 8     added
+## LARS Step 5 :     Variable 4     added
+## LARS Step 6 :     Variable 6     added
+## LARS Step 7 :     Variable 3     added
+## LARS Step 8 :     Variable 7     added
+## Computing residuals, RSS etc .....
+## 
+##  CV Fold 5 
+## 
+## LASSO sequence
+## Computing X&#39;X .....
+## LARS Step 1 :     Variable 1     added
+## LARS Step 2 :     Variable 5     added
+## LARS Step 3 :     Variable 8     added
+## LARS Step 4 :     Variable 2     added
+## LARS Step 5 :     Variable 4     added
+## LARS Step 6 :     Variable 7     added
+## LARS Step 7 :     Variable 6     added
+## LARS Step 8 :     Variable 3     added
+## Computing residuals, RSS etc .....
+## 
+##  CV Fold 6 
+## 
+## LASSO sequence
+## Computing X&#39;X .....
+## LARS Step 1 :     Variable 1     added
+## LARS Step 2 :     Variable 5     added
+## LARS Step 3 :     Variable 8     added
+## LARS Step 4 :     Variable 2     added
+## LARS Step 5 :     Variable 4     added
+## LARS Step 6 :     Variable 3     added
+## LARS Step 7 :     Variable 6     added
+## LARS Step 8 :     Variable 7     added
+## Computing residuals, RSS etc .....
+## 
+##  CV Fold 7 
+## 
+## LASSO sequence
+## Computing X&#39;X .....
+## LARS Step 1 :     Variable 1     added
+## LARS Step 2 :     Variable 8     added
+## LARS Step 3 :     Variable 5     added
+## LARS Step 4 :     Variable 2     added
+## LARS Step 5 :     Variable 4     added
+## LARS Step 6 :     Variable 7     added
+## LARS Step 7 :     Variable 3     added
+## LARS Step 8 :     Variable 6     added
+## Computing residuals, RSS etc .....
+## 
+##  CV Fold 8 
+## 
+## LASSO sequence
+## Computing X&#39;X .....
+## LARS Step 1 :     Variable 1     added
+## LARS Step 2 :     Variable 5     added
+## LARS Step 3 :     Variable 2     added
+## LARS Step 4 :     Variable 4     added
+## LARS Step 5 :     Variable 8     added
+## LARS Step 6 :     Variable 6     added
+## LARS Step 7 :     Variable 7     added
+## LARS Step 8 :     Variable 3     added
+## Computing residuals, RSS etc .....
+## 
+##  CV Fold 9 
+## 
+## LASSO sequence
+## Computing X&#39;X .....
+## LARS Step 1 :     Variable 1     added
+## LARS Step 2 :     Variable 5     added
+## LARS Step 3 :     Variable 8     added
+## LARS Step 4 :     Variable 2     added
+## LARS Step 5 :     Variable 4     added
+## LARS Step 6 :     Variable 6     added
+## LARS Step 7 :     Variable 3     added
+## LARS Step 8 :     Variable 7     added
+## Computing residuals, RSS etc .....
+## 
+##  CV Fold 10</code></pre>
+<p><img src="Week4_notes_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
+</div>
+<div id="caret-package" class="section level5">
+<h5>Caret Package</h5>
+<p>In <code>caret</code> package, the methods are <code>ridge</code>, <code>lasso</code>, <code>relaxo</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="combining-models-to-increase-predictive-power---model-stacking" class="section level2">
+<h2>Combining models to increase predictive power - model stacking</h2>
+<div id="basic-idea-of-using-majority-vote" class="section level3">
+<h3>Basic idea of using majority vote</h3>
+<p>Suppose we have 5 completely independent classifiers.</p>
+<p>If accuracy is 70% for each:</p>
+<ul>
+<li><p><span class="math inline">\(10\times(0.7)^3(0.3)^2 + 5\times(0.7)^4(0.3)^2 + (0.7)^5\)</span></p></li>
+<li><p>83.7% majority vote accuracy</p></li>
+</ul>
+<p>Then, With 101 independent classifiers:</p>
+<ul>
+<li>99.9% majority vote accuracy</li>
+</ul>
+</div>
+<div id="approaches-for-combining-classifiers" class="section level3">
+<h3>Approaches for combining classifiers</h3>
+<ol style="list-style-type: decimal">
+<li>Bagging, boosting, random forests</li>
+</ol>
+<ul>
+<li>Usually combine <em>similar</em> classifiers</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Combining different classifiers</li>
+</ol>
+<ul>
+<li><p>Model stacking (the focus of the section)</p></li>
+<li><p>Model ensembling</p></li>
+</ul>
+</div>
+<div id="wage-data-example" class="section level3">
+<h3>wage data example</h3>
+<pre class="r"><code>library(ISLR); data(Wage); library(ggplot2); library(caret);
+
+Wage &lt;- subset(Wage,select=-c(logwage))
+
+# Create a building data set and validation set
+inBuild &lt;- createDataPartition(y=Wage$wage, p=0.7, list=FALSE)
+validation &lt;- Wage[-inBuild,]; buildData &lt;- Wage[inBuild,]
+
+# Create both a training and test set with the building data set
+inTrain &lt;- createDataPartition(y=buildData$wage, p=0.7, list=FALSE)
+training &lt;- buildData[inTrain,]; testing &lt;- buildData[-inTrain,]</code></pre>
+</div>
+<div id="build-two-different-models" class="section level3">
+<h3>Build two different models</h3>
+<pre class="r"><code>mod1 &lt;- train(wage ~.,method=&quot;glm&quot;,data=training)
+
+mod2 &lt;- train(wage ~.,method=&quot;rf&quot;, data=training, trControl = trainControl(method=&quot;cv&quot;), number=3)</code></pre>
+<p>Two different classifiers: one is glm and the other is random forest.</p>
+</div>
+<div id="predict-on-the-testing-set" class="section level3">
+<h3>Predict on the testing set</h3>
+<pre class="r"><code>pred1 &lt;- predict(mod1,testing); pred2 &lt;- predict(mod2,testing)</code></pre>
+<pre><code>## Warning in predict.lm(object, newdata, se.fit, scale = 1, type = if (type
+## == : prediction from a rank-deficient fit may be misleading</code></pre>
+<pre class="r"><code>qplot(pred1,pred2,colour=wage,data=testing)</code></pre>
+<p><img src="Week4_notes_files/figure-html/predict-1.png" width="576" /></p>
+<p>From the graph, you can see that they are close to one another, but not agree 100%.</p>
+</div>
+<div id="fit-a-model-that-combines-predictors" class="section level3">
+<h3>Fit a model that combines predictors</h3>
+<pre class="r"><code>#build a new dataset that uses the test dataset
+predDF &lt;- data.frame(pred1,pred2,wage=testing$wage)
+
+combModFit &lt;- train(wage ~.,method=&quot;gam&quot;,data=predDF)</code></pre>
+<pre><code>## Loading required package: mgcv</code></pre>
+<pre><code>## Loading required package: nlme</code></pre>
+<pre><code>## This is mgcv 1.8-28. For overview type &#39;help(&quot;mgcv-package&quot;)&#39;.</code></pre>
+<pre class="r"><code>combPred &lt;- predict(combModFit,predDF)</code></pre>
+</div>
+<div id="testing-errors" class="section level3">
+<h3>Testing errors</h3>
+<pre class="r"><code>sqrt(sum((pred1-testing$wage)^2))</code></pre>
+<pre><code>## [1] 856.8023</code></pre>
+<pre class="r"><code>sqrt(sum((pred2-testing$wage)^2))</code></pre>
+<pre><code>## [1] 919.4781</code></pre>
+<pre class="r"><code>sqrt(sum((combPred-testing$wage)^2))</code></pre>
+<pre><code>## [1] 854.6831</code></pre>
+<p>Notice that the test set has been used to train the combined model and hence we need to do it on the new validation set (that’s why we need three datasets).</p>
+</div>
+<div id="predict-on-validation-data-set" class="section level3">
+<h3>Predict on validation data set</h3>
+<pre class="r"><code>pred1V &lt;- predict(mod1,validation); pred2V &lt;- predict(mod2,validation)</code></pre>
+<pre><code>## Warning in predict.lm(object, newdata, se.fit, scale = 1, type = if (type
+## == : prediction from a rank-deficient fit may be misleading</code></pre>
+<pre class="r"><code>predVDF &lt;- data.frame(pred1=pred1V,pred2=pred2V)
+
+combPredV &lt;- predict(combModFit,predVDF)</code></pre>
+</div>
+<div id="evaluate-on-validation" class="section level3">
+<h3>Evaluate on validation</h3>
+<pre class="r"><code>sqrt(sum((pred1V-validation$wage)^2))</code></pre>
+<pre><code>## [1] 1013.392</code></pre>
+<pre class="r"><code>sqrt(sum((pred2V-validation$wage)^2))</code></pre>
+<pre><code>## [1] 1045.807</code></pre>
+<pre class="r"><code>sqrt(sum((combPredV-validation$wage)^2))</code></pre>
+<pre><code>## [1] 1009.993</code></pre>
+<p>The combined model has a lower error rate which shows model stacking improves accuracy.</p>
+</div>
+</div>
+<div id="basic-time-series-forecasting" class="section level2">
+<h2>Basic time series forecasting</h2>
+<p>Data are dependent over time and they have specific pattern types like trends(long term increase/decrease), seasonal patterns(patterns related to week, month, year etc.) and cycles(patterns that rise/fall periodically). Subsampling into training/test is more complicated.</p>
+<p>Similar issues arise in spatial data.</p>
+<p>Typically goal is to predict one or more observations into the future.</p>
+<div id="read-in-google-stock-price-data-using-quantmod" class="section level3">
+<h3>Read in Google stock price data using <code>quantmod</code></h3>
+<pre class="r"><code>library(quantmod)</code></pre>
+<pre><code>## Loading required package: xts</code></pre>
+<pre><code>## Registered S3 method overwritten by &#39;xts&#39;:
+##   method     from
+##   as.zoo.xts zoo</code></pre>
+<pre><code>## Loading required package: TTR</code></pre>
+<pre><code>## Registered S3 method overwritten by &#39;quantmod&#39;:
+##   method            from
+##   as.zoo.data.frame zoo</code></pre>
+<pre><code>## Version 0.4-0 included new data defaults. See ?getSymbols.</code></pre>
+<pre><code>## 
+## Attaching package: &#39;quantmod&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:Hmisc&#39;:
+## 
+##     Lag</code></pre>
+<pre class="r"><code>from.dat &lt;- as.Date(&quot;01/01/08&quot;, format=&quot;%m/%d/%y&quot;)
+to.dat &lt;- as.Date(&quot;12/31/13&quot;, format=&quot;%m/%d/%y&quot;)
+
+getSymbols(&quot;GOOG&quot;, src=&quot;yahoo&quot;, from = from.dat, to = to.dat)</code></pre>
+<pre><code>## &#39;getSymbols&#39; currently uses auto.assign=TRUE by default, but will
+## use auto.assign=FALSE in 0.5-0. You will still be able to use
+## &#39;loadSymbols&#39; to automatically load data. getOption(&quot;getSymbols.env&quot;)
+## and getOption(&quot;getSymbols.auto.assign&quot;) will still be checked for
+## alternate defaults.
+## 
+## This message is shown once per session and may be disabled by setting 
+## options(&quot;getSymbols.warning4.0&quot;=FALSE). See ?getSymbols for details.</code></pre>
+<pre><code>## [1] &quot;GOOG&quot;</code></pre>
+<pre class="r"><code>head(GOOG)</code></pre>
+<pre><code>##            GOOG.Open GOOG.High GOOG.Low GOOG.Close GOOG.Volume
+## 2008-01-02  345.1413  347.3829 337.5996   341.3157     8646000
+## 2008-01-03  341.3505  342.1426 336.9969   341.3854     6529300
+## 2008-01-04  338.5759  339.2086 326.2770   327.2733    10759700
+## 2008-01-07  325.7490  329.9034 317.4850   323.4128    12854700
+## 2008-01-08  325.2808  328.7478 314.3218   314.6606    10718100
+## 2008-01-09  313.8436  325.4501 310.0927   325.3804    13529800
+##            GOOG.Adjusted
+## 2008-01-02      341.3157
+## 2008-01-03      341.3854
+## 2008-01-04      327.2733
+## 2008-01-07      323.4128
+## 2008-01-08      314.6606
+## 2008-01-09      325.3804</code></pre>
+</div>
+<div id="summarize-monthly-and-store-as-time-series" class="section level3">
+<h3>Summarize monthly and store as time series</h3>
+<pre class="r"><code>require(&quot;forecast&quot;)</code></pre>
+<pre><code>## Loading required package: forecast</code></pre>
+<pre><code>## Registered S3 methods overwritten by &#39;forecast&#39;:
+##   method             from    
+##   fitted.fracdiff    fracdiff
+##   residuals.fracdiff fracdiff</code></pre>
+<pre><code>## 
+## Attaching package: &#39;forecast&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:nlme&#39;:
+## 
+##     getResponse</code></pre>
+<pre class="r"><code>mGoog &lt;- to.monthly(GOOG)
+googOpen&lt;-Op(mGoog) #take the opening price of Google
+
+ts1 &lt;- ts(googOpen,frequency=12) #specify it&#39;s time series and monthly data
+
+plot(ts1,xlab=&quot;Years+1&quot;, ylab=&quot;GOOG&quot;)</code></pre>
+<p><img src="Week4_notes_files/figure-html/tseries-1.png" width="384" /></p>
+</div>
+<div id="example-time-series-decomposition" class="section level3">
+<h3>Example time series decomposition</h3>
+<ul>
+<li><p><strong>Trend</strong> - Consistently increasing pattern over time</p></li>
+<li><p><strong>Seasonal</strong> - When there is a pattern over a fixed period of time that recurs.</p></li>
+<li><p><strong>Cyclic</strong> - When data rises and falls over non fixed periods</p></li>
+</ul>
+<p><a href="https://www.otexts.org/fpp/6/1" class="uri">https://www.otexts.org/fpp/6/1</a></p>
+<pre class="r"><code>#decompose into a series of patterns: trend, seasons and cycle
+plot(decompose(ts1),xlab=&quot;Years+1&quot;)</code></pre>
+<p><img src="Week4_notes_files/figure-html/unnamed-chunk-5-1.png" width="432" /></p>
+</div>
+<div id="splitting-into-training-and-test-sets" class="section level3">
+<h3>Splitting into training and test sets</h3>
+<pre class="r"><code>ts1Train &lt;- window(ts1,start=1,end=5)
+ts1Test &lt;- window(ts1,start=5,end=(7-0.01))</code></pre>
+<pre><code>## Warning in window.default(x, ...): &#39;end&#39; value not changed</code></pre>
+<pre class="r"><code>ts1Train</code></pre>
+<pre><code>##        Jan      Feb      Mar      Apr      May      Jun      Jul      Aug
+## 1 345.1413 263.3479 234.8746 223.0340 288.0752 290.1624 258.8199 235.3728
+## 2 153.7238 166.5208 166.0426 171.2481 196.7774 208.5832 211.3080 223.5322
+## 3 312.3044 266.3018 263.6119 284.6082 262.2670 239.3180 221.8136 243.5820
+## 4 297.1263 301.1163 307.7365 293.2807 271.8311 263.0341 252.4239 304.4688
+## 5 325.2509                                                               
+##        Sep      Oct      Nov      Dec
+## 1 237.4948 204.8073 178.1224 142.8047
+## 2 228.9817 245.5795 267.5372 292.9669
+## 3 226.6405 264.0104 306.7154 280.4488
+## 4 269.3654 253.9731 288.9669 298.8797
+## 5</code></pre>
+</div>
+<div id="moving-averages---smoothing-the-data" class="section level3">
+<h3>Moving Averages - smoothing the data</h3>
+<div id="simple-moving-average" class="section level4">
+<h4>Simple Moving Average</h4>
+<p><span class="math display">\[ Y_{t}=\frac{1}{2*k+1}\sum_{j=-k}^k {y_{t+j}}\]</span></p>
+<pre class="r"><code>plot(ts1Train)
+
+lines(ma(ts1Train,order=3),col=&quot;red&quot;)</code></pre>
+<p><img src="Week4_notes_files/figure-html/unnamed-chunk-6-1.png" width="432" /></p>
+</div>
+<div id="exponential-smoothing" class="section level4">
+<h4>Exponential smoothing</h4>
+<p><strong>Example - simple exponential smoothing</strong></p>
+<p><span class="math display">\[\hat{y}_{t+1} = \alpha y_t + (1-\alpha)\hat{y}_{t-1}\]</span></p>
+<pre class="r"><code>ets1 &lt;- ets(ts1Train,model=&quot;MMM&quot;) #first letter is error type; second letter denotes the trend type: monthly; third letter the season type; M = multiplicative  
+
+fcast &lt;- forecast(ets1)
+
+plot(fcast); lines(ts1Test,col=&quot;red&quot;)</code></pre>
+<p><img src="Week4_notes_files/figure-html/ets-1.png" width="432" /></p>
+</div>
+</div>
+<div id="get-the-accuracy-measaure" class="section level3">
+<h3>Get the accuracy measaure</h3>
+<pre class="r"><code>accuracy(fcast,ts1Test)</code></pre>
+<pre><code>##                      ME     RMSE      MAE        MPE      MAPE      MASE
+## Training set  0.2000302 26.09189 20.65928 -0.3572633  8.302526 0.3933832
+## Test set     69.8911746 93.08104 72.04076 16.2879469 17.032408 1.3717625
+##                       ACF1 Theil&#39;s U
+## Training set -0.0002846501        NA
+## Test set      0.7575349604  3.375609</code></pre>
+</div>
+<div id="notes-and-further-resources" class="section level3">
+<h3>Notes and further resources</h3>
+<ul>
+<li><p><a href="http://en.wikipedia.org/wiki/Forecasting">Forecasting and timeseries prediction</a> is an entire field</p></li>
+<li><p>Rob Hyndman’s <a href="https://www.otexts.org/fpp/">Forecasting: principles and practice</a> is a good place to start</p></li>
+<li><p>Cautions:</p></li>
+<li><p>Be wary of spurious correlations</p></li>
+<li><p>Be careful how far you predict (extrapolation)</p></li>
+<li><p>Be wary of dependencies over time</p></li>
+<li><p>See <a href="http://cran.r-project.org/web/packages/quantmod/quantmod.pdf">quantmod</a> or <a href="http://www.quandl.com/help/packages/r">quandl</a> packages for finance-related problems.</p></li>
+</ul>
+</div>
+</div>
+<div id="unsupervised-prediction" class="section level2">
+<h2>Unsupervised Prediction</h2>
+<div id="key-ideas" class="section level3">
+<h3>Key ideas</h3>
+<ul>
+<li><p>Sometimes you don’t know the labels for the outcome variable.</p></li>
+<li><p>You will need to:</p></li>
+<li><p>Create clusters (for example, use k-means)</p></li>
+<li><p>Name the clusters (i.e. interpret your results from the previous step)</p></li>
+<li><p>Build predictor for the clusters (build the model to explain; in previous problem, we know what we try to predict, so we are in this step right away)</p></li>
+<li><p>In a new data set (test set or validation set)</p></li>
+<li><p>Predict clusters</p></li>
+</ul>
+</div>
+<div id="iris-example-ignoring-species-labels" class="section level3">
+<h3>Iris example ignoring species labels</h3>
+<pre class="r"><code>data(iris); library(ggplot2)
+inTrain &lt;- createDataPartition(y=iris$Species, p=0.7, list=FALSE)
+
+training &lt;- iris[inTrain,]; testing &lt;- iris[-inTrain,]
+dim(training); dim(testing)</code></pre>
+<pre><code>## [1] 105   5</code></pre>
+<pre><code>## [1] 45  5</code></pre>
+</div>
+<div id="cluster-with-k-means" class="section level3">
+<h3>Cluster with k-means</h3>
+<pre class="r"><code>kMeans1 &lt;- kmeans(subset(training,select=-c(Species)),centers=3)
+
+training$clusters &lt;- as.factor(kMeans1$cluster)
+
+qplot(Petal.Width,Petal.Length,colour=clusters,data=training)</code></pre>
+<p><img src="Week4_notes_files/figure-html/kmeans-1.png" width="576" /></p>
+</div>
+<div id="compare-to-real-labels" class="section level3">
+<h3>Compare to real labels</h3>
+<pre class="r"><code>table(kMeans1$cluster,training$Species)</code></pre>
+<pre><code>##    
+##     setosa versicolor virginica
+##   1      0          2        26
+##   2      0         33         9
+##   3     35          0         0</code></pre>
+</div>
+<div id="build-model-with-predictors" class="section level3">
+<h3>Build model with predictors</h3>
+<pre class="r"><code>modFit &lt;- train(clusters ~.,data=subset(training,select=-c(Species)),method=&quot;rpart&quot;)
+
+table(predict(modFit,training),training$Species)</code></pre>
+<pre><code>##    
+##     setosa versicolor virginica
+##   1      0          0        24
+##   2      0         35        11
+##   3     35          0         0</code></pre>
+</div>
+<div id="apply-on-test-set" class="section level3">
+<h3>Apply on test set</h3>
+<pre class="r"><code>testClusterPred &lt;- predict(modFit,testing) 
+
+table(testClusterPred ,testing$Species)</code></pre>
+<pre><code>##                
+## testClusterPred setosa versicolor virginica
+##               1      0          0        10
+##               2      0         15         5
+##               3     15          0         0</code></pre>
+</div>
+</div>
+
+<p>Copyright &copy; 2019 Cathy Gao at cathygao.2019@outlook.com.</p>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

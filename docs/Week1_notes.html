@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Week1_notes</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Class Material</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Practical Machine Learning</a>
+</li>
+<li>
+  <a href="https://cathydatascience.github.io/PracticalMachineLearning_Project/">Project Paper</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Notes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Week1_notes.html">Week 1</a>
+    </li>
+    <li>
+      <a href="Week2_notes.html">Week 2</a>
+    </li>
+    <li>
+      <a href="Week3_notes.html">Week 3</a>
+    </li>
+    <li>
+      <a href="Week4_notes.html">Week 4</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Quizzes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Week2quiz_codes.html">Week 2</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="Week3quiz_codes.html">Week 3</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="Week4quiz_codes.html">Week 4</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="http://cathydatascience.github.io/showprojectsonline">
+    <span class="fa fa-question fa-lg"></span>
+     
+    How to publish project paper(s) online
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Week1_notes</h1>
+
+</div>
+
+
+<div id="key-wordsconcepts-of-week-1" class="section level2">
+<h2>Key Words/Concepts of Week 1</h2>
+<ul>
+<li>the process of machine learning</li>
+<li>model evaluation<br />
+# in and out of sample errors<br />
+# specificity and sensitivity<br />
+# receiver operating characteristic(ROC) curve<br />
+</li>
+<li>cross validation<br />
+</li>
+<li>resrouces to learn more</li>
+</ul>
+</div>
+<div id="the-process-of-machine-learning" class="section level2">
+<h2>The process of Machine Learning</h2>
+<ol style="list-style-type: decimal">
+<li><p>start with a question You need to think about what to predict and what you need to predict with.</p></li>
+<li><p>collect the input data The collected data should be directly related to your question. More data trumps better methods.</p></li>
+<li><p>from data, use measure characteristics or build features that might be useful Err on the side of creating more features.</p></li>
+<li><p>pick an appropriate algorithm It matter less - many models provide similar predictions.</p></li>
+<li><p>estimate the parameters of the algorithm</p></li>
+<li><p>use the test set to evaluate your model Several criteria: interpretable (for example, if-then interpretation in decision tree models), simple, accurate, fast and scalable (which can be applied in big data)</p></li>
+</ol>
+<p><strong>SPAM example to illustrate the process</strong></p>
+<pre class="r"><code>library(kernlab)
+data(spam)
+#head(spam)
+
+plot(density(spam$your[spam$type==&quot;nonspam&quot;]), col=&quot;blue&quot;, main=&quot;&quot;, xlab=&quot;Frequency of &#39;your&#39;&quot;)
+lines(density(spam$your[spam$type==&quot;spam&quot;]), col=&quot;red&quot;)
+abline(v=0.5, col=&quot;black&quot;)</code></pre>
+<p><img src="Week1_notes_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<pre class="r"><code>prediction&lt;-ifelse(spam$your&gt;0.5, &quot;spam&quot;, &quot;nonspam&quot;)
+table(prediction, spam$type)/length(spam$type)</code></pre>
+<pre><code>##           
+## prediction   nonspam      spam
+##    nonspam 0.4590306 0.1017170
+##    spam    0.1469246 0.2923278</code></pre>
+</div>
+<div id="model-evaluation" class="section level2">
+<h2>Model evaluation</h2>
+<div id="in-and-out-of-sample-error-rate" class="section level3">
+<h3>1. in and out of sample error rate</h3>
+<ul>
+<li><p>in sample error: the error rate you get on the same data you used to build predictor, a.k.a. resubstitution error</p></li>
+<li><p>out of sample error: error rate you get on a new data set, a.k.a. generalization error</p></li>
+<li><p>out of sample error is what matters; in sample error always is smaller (the reason is veryfitting and you capture the noise rather the the signal)</p></li>
+</ul>
+<p><strong>Example of in and out of sample error rates</strong></p>
+<pre class="r"><code>library(kernlab); data(spam); set.seed(333)
+smallSpam&lt;-spam[sample(dim(spam)[1], size=10),]
+spamLabel&lt;-(smallSpam$type==&quot;spam&quot;)*1+1
+plot(smallSpam$capitalAve, col=spamLabel)</code></pre>
+<p><img src="Week1_notes_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code>rule1&lt;-function(x){
+    prediction&lt;-rep(NA, length(x))
+    prediction[x&gt;2.7]&lt;-&quot;spam&quot;
+    prediction[x&lt;2.4]&lt;-&quot;nonspam&quot;
+    prediction[(x&gt;=2.4 &amp; x&lt;=2.45)]&lt;-&quot;spam&quot;
+    prediction[(x&gt;2.45 &amp; x&lt;=2.7)]&lt;-&quot;nonspam&quot;
+    return(prediction)
+}
+table(rule1(smallSpam$capitalAve), smallSpam$type)</code></pre>
+<pre><code>##          
+##           nonspam spam
+##   nonspam       5    1
+##   spam          1    3</code></pre>
+<pre class="r"><code>rule2&lt;-function(x){
+    prediction&lt;-rep(NA, length(x))
+    prediction[x&gt;2.8]&lt;-&quot;spam&quot;
+    prediction[x&lt;=2.8]&lt;-&quot;nonspam&quot;
+    return(prediction)
+}
+table(rule2(smallSpam$capitalAve), smallSpam$type)</code></pre>
+<pre><code>##          
+##           nonspam spam
+##   nonspam       5    1
+##   spam          1    3</code></pre>
+<pre class="r"><code>## apply to the whole dataset
+table(rule1(spam$capitalAve), spam$type)</code></pre>
+<pre><code>##          
+##           nonspam spam
+##   nonspam    2141  588
+##   spam        647 1225</code></pre>
+<pre class="r"><code>table(rule2(spam$capitalAve), spam$type)</code></pre>
+<pre><code>##          
+##           nonspam spam
+##   nonspam    2224  642
+##   spam        564 1171</code></pre>
+<pre class="r"><code>##accuracy
+sum(rule1(spam$capitalAve)==spam$type)</code></pre>
+<pre><code>## [1] 3366</code></pre>
+<pre class="r"><code>sum(rule2(spam$capitalAve)==spam$type)</code></pre>
+<pre><code>## [1] 3395</code></pre>
+</div>
+<div id="training-testing-and-validation-sets" class="section level3">
+<h3>2. training, testing and validation sets</h3>
+<ul>
+<li><p>split data into: training, test, validation (optional)</p></li>
+<li>use the training set, cross validate to pick features</li>
+<li>apply only one time your algorithm obtained from training set on the test set or the validation set</li>
+<li><p>good to know the benchmark: make the parameters 0</p></li>
+<li><p>avoid small sample sizes - avoid random guessing that prevents learning evaluation</p></li>
+<li><p>rules of thumb: 60% training, 20% test, 20% validation for large sample size; medium size uses 60% for training and 40% for testing</p></li>
+<li><p>some key principles: never look at your test/validation set (make it as independent as possible from your training set); random time chunks in time-series data</p></li>
+</ul>
+</div>
+<div id="types-of-errors" class="section level3">
+<h3>3. types of errors:</h3>
+<p><em><strong>binary outcome example</strong></em> * true positive = correctly identified * false positive = incorrectly identified * true negative = correctly rejected * false negative = incorrectly rejected</p>
+<p>The “true” and “false” here mean being “correct” and “incorrect”. The “positive” and “negative” mean what the study/research tries to identify.</p>
+<p>The probability of being false positive is also the type I error (under the null, you reject even it is true). The probability of being false negative is the type II error (you incorrectly fail to reject since the alternative is the truth)</p>
+<ul>
+<li>specificity: given that you are sick (the test tries to get), the probability the test identifies you as sick.</li>
+<li>sensitivity: given that you are not sick, the probability the test identifies you as not sick.</li>
+<li><p>2*2 table: accuracy is the probability of correct positive and incorrect negative</p></li>
+<li><p>Instead of binary outcome, we may have continuous data and the critera will be mean squared error(MSE or root MSE), median absolute deviation (as opposed to specificity and sensitivity, accuracy for binary data) and also concordance (which is a distance measure, e.g. kappa)</p></li>
+</ul>
+</div>
+<div id="roc---receiver-operating-characteristic-curve" class="section level3">
+<h3>4. ROC - receiver operating characteristic curve</h3>
+<p><a href="http://en.wikipedia.org/wiki/Receiver_operating_characteristic">Wiki ROC link</a></p>
+<p>area under the curve (AUC) is a guage of goodness of fit: AUC of above 0.8 considered to be good (the benchmark is the 45 degree line representing random guessing)</p>
+</div>
+</div>
+<div id="cross-validation" class="section level2">
+<h2>Cross validation</h2>
+<p>It is a widely and commonly used technique to detect relevant features and to build models.</p>
+<ul>
+<li><p>random subsampling (done with no replacment; can use 0.632bootstrap to do with sampling with rereplacement because of underestimation of error - if you get one right, the same other in the sample that you sample will be right too)</p></li>
+<li>K fold</li>
+<li>large k means less bias, more variance</li>
+<li><p>small k means more bias, less variance</p></li>
+<li><p>Leave one out</p></li>
+</ul>
+<p>They are are aiming at reducing the out-of-sample error rate.</p>
+<p>It cannot be emphasized enough that error estimation is on independent data (the subset that you leave out instead of using to build the model).</p>
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<ul>
+<li><p>kaggle.com</p></li>
+<li><p>heritagehealthprize.com/hhp</p></li>
+<li><p>caret package in R</p></li>
+<li><p>elements of statistical learning (free copy of pdf from author’s website)</p></li>
+<li><p>coursera course: standford - machine learning - andrew ng</p></li>
+<li><p><a href="http://www.quora.com/Machine-Learning/What-are-some-good-resources-for-learning-about-machine-learning-Why">List of machine learning resources on Quora</a></p></li>
+<li><p><a href="http://www.sciencemag.org/site/feature/data/compsci/machine_learning.xhtml">List of machine learning resources from Science</a></p></li>
+<li><p><a href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-867-machine-learning-fall-2006/lecture-notes/">Advanced notes from MIT open courseware</a></p></li>
+<li><p><a href="http://www.stat.cmu.edu/~cshalizi/350/">Advanced notes from CMU</a></p></li>
+<li><p><a href="http://www.kaggle.com/">Kaggle - machine learning competitions</a></p></li>
+</ul>
+</div>
+
+<p>Copyright &copy; 2019 Cathy Gao at cathygao.2019@outlook.com.</p>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
