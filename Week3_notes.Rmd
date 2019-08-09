@@ -1,0 +1,235 @@
+---
+title: "Week3_notes"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Key Words/Concepts of Week 3
+
+This week focuses on the prediction of categorical variables.   
+
+* decision tree models  
+* bagging 
+    + random forest model
+* boosting 
+    + gradient boosting model
+* parametric model (Bayesian update) prediction
+
+## Decision Tree 
+
+### Key ideas
+* iteratively split variables into groups   
+* evaluate "homogeneity" within each group  
+* split again if necessary  
+
+#### **_features_**   
+1. classfication trees perform better in non-linear settings and easy to interpret
+2. data transformation less important: monotonic transformation will not change outcome
+3. results may vary and harder to estimate uncertainty 
+4. it may lead to overfitting without pruning/cross-validation
+
+#### **_basic algorithm_**  
+1. Start with all variables in one group. 
+2. Find the variables/split that best separates the outcomes. 
+3. Divide the data into two groups ("leaves") on that split ("node"). 
+4. Within each split, find the best variable/split that separates the outcomes (with *all* the variables)
+5. Continue until the groups are too small or sufficiently "pure". 
+
+
+#### **_measures of homogeneity (or more precise, impurity)_**  
+1. misclassification error (0 is perfect purity and 0.5 is no purity)
+2. gini index (0 is perfect purity and 0.5 no purity)
+3. deviance/information gain (or "entropy") - 0 is perfect purity and 1 is no purity
+
+### Example of Decision Tree Model 
+``` {r}
+data(iris); library(ggplot2); library(caret)
+names(iris)
+table(iris$Species) #try to predict Species
+
+inTrain<-createDataPartition(y=iris$Species, p=0.7, list=FALSE)
+training<-iris[inTrain, ]
+testing<-iris[-inTrain, ]
+dim(training); dim(testing)
+
+# see clearly three groups which may be hard for linear model fitting
+qplot(Petal.Width, Sepal.Width, colour=Species, data=training)
+
+library(caret)
+modFit<-train(Species~., method="rpart", data=training) #r package in partition tree method
+print(modFit$finalModel)
+
+#an alterative way to see - graph
+plot(modFit$finalModel, uniform=TRUE, main="Classification Tree") # dendogram
+text(modFit$finalModel, use.n=TRUE, all=TRUE, cex=0.8)
+
+# prettier plots and need the "rattle" package
+library(rattle)
+fancyRpartPlot(modFit$finalModel)
+
+# make prediction using the decision tree model
+table(predict(modFit, newdata=testing), testing$Species)
+```
+
+## Bagging (bootstrap aggregating)
+
+### Key ideas
+1. Resample observations and recalculate predictions with a type of model (which can be decision tree)
+2. Use weighted average of models from the previous step or use majority vote for making predictions of an outcome 
+
+The advantage of bagging is that it has similar bias as compared to a single model, but variance of the prediction is reduced. It has shown that bagging is more useful in non-linear setting. 
+
+### Example of Bagging 
+```{r}
+library(ElemStatLearn); data(ozone, package="ElemStatLearn")
+ozone<-ozone[order(ozone$ozone), ] #try to predict temperature as a function of ozone
+str(ozone)
+
+#10 random samples with replacement from dataset 
+#ozone variable ranges from 1 to 168 and we make prediction using 155 ozone numbers
+ll<-matrix(NA, nrow=10, ncol=155) 
+
+for (i in 1:10){
+    ss<-sample(1:dim(ozone)[1], replace=T)
+    ozone0<-ozone[ss, ]; ozone0<-ozone0[order(ozone0$ozone), ]
+    #similar to spline, loess produces a smooth curve
+    loess0<-loess(temperature~ozone, data=ozone0, span=0.2) #span option controls how smooth the loess curve is 
+    ll[i, ]<-predict(loess0, newdata=data.frame(ozone=1:155)) 
+}
+
+#data points 
+plot(ozone$ozone, ozone$temperature, pch=19, cex=0.5)
+#the ten estimation lines from bootstrap samples
+for (i in 1:10) {lines(1:155, ll[i, ], col="grey", lwd=2)} 
+#the average estimation (bagging) line
+lines(1:155, apply(ll, 2, mean), col="red", lwd=2)
+```
+
+In the `train` function, other models are available for bagging. Use `method` options to choose `bagEarth`, `treebag`, and `bagFDA` etc.. 
+
+Alternatively, you can build your own function using the `bag` function.
+
+```{r message=FALSE, warning=FALSE}
+library(party)
+predictors=data.frame(ozone=ozone$ozone)
+temperature=ozone$temperature
+treebag<-bag(predictors, temperature, B=10, bagControl=bagControl(fit=ctreeBag$fit, predict=ctreeBag$pred, aggregate=ctreeBag$aggregate))
+
+#data points
+plot(ozone$ozone, temperature, col="lightgrey", pch=19)
+#first tree estimate
+points(ozone$ozone, predict(treebag$fits[[1]]$fit, predictors), pch=19, col="red")
+#combined 10 tree estimates
+points(ozone$ozone, predict(treebag, predictors), pch=19, col="blue")
+```
+
+### Random Forest
+Bagging is often used with trees - an extension is random forests, which is highly accurate and popular in many data science contests. 
+
+#### Key Idea
+1. Similar to bagging it uses bootstrap samples. 
+2. The difference is: at each split, the algorithm bootstraps **only a subset of variables**, which allows for a diverse number of trees. 
+2. From the diverse multiple trees, vote or use weighted average to get the final outcome
+
+The drawback is the method can be slow to run on computer, but you can use parallel computing. And, it may lead to overfitting, in which case, it is hard to tell which tree leads to the problem). It is a combination of many tree models, it can be harder to interpret the decision rule. 
+
+#### Example of Random Forest
+```{r message=FALSE, warning=FALSE}
+data(iris); library(ggplot2)
+inTrain <- createDataPartition(y=iris$Species, p=0.7, list=FALSE)
+training <- iris[inTrain,]
+testing <- iris[-inTrain,]
+
+library(caret); library(randomForest)
+modFit <- train(Species~ .,data=training,method="rf",prox=TRUE) #"rf" is the random forest method; prox=TRUE produces extra info
+
+getTree(modFit$finalModel,k=2) #look at a specific tree
+
+irisP <- classCenter(training[,c(3,4)], training$Species, modFit$finalModel$prox) #take only `Petal.Length` and `Petal.Width` in irisP
+irisP <- as.data.frame(irisP); irisP$Species <- rownames(irisP)
+p <- qplot(Petal.Width, Petal.Length, col=Species,data=training)
+p + geom_point(aes(x=Petal.Width,y=Petal.Length,col=Species),size=5,shape=4,data=irisP)
+
+pred <- predict(modFit,testing) 
+testing$predRight <- pred==testing$Species
+table(pred,testing$Species)
+
+qplot(Petal.Width,Petal.Length,colour=predRight,data=testing,main="newdata Predictions")
+```
+
+## Boosting 
+Along with random forest, boosting also produces very accurate prediction. 
+
+### Key idea
+1. Take lots of (possibly) weak models 
+* take k classifiers typically from the same family (e.g. all possible trees, regression models, cutoff points)  
+2. Weight the models to take advantage of their strengths and add them up
+3. You end up with a stronger model
+
+The function is a weighted average of models. 
+
+The goal of minimized error on the training set. 
+
+The algorithm is to use iterative methods to select one classifier at each step, calculate the weights based on error, and upweight missed classifications and select next classifer. 
+
+One large subclass of boosting is gradient boosting. 
+    * `gbm` - boosting with trees
+    * `mboost` - model based boosting
+    * `ada` - statistical boosting based on additive logitstic regression
+
+Adaboost is perhaps the most famous boosting method.   
+[Adaboost on Wikipedia](http://en.wikipedia.org/wiki/AdaBoost)
+
+[Helpful boosting tutorial](http://webee.technion.ac.il/people/rmeir/BoostingTutorial.pdf)
+
+### Example of Boosting
+``` {r message=FALSE, warning=FALSE}
+library(ISLR); data(Wage); library(ggplot2); library(caret); 
+Wage<-subset(Wage, select=-c(logwage))
+inTrain<-createDataPartition(y=Wage$wage, p=0.7, list=FALSE)
+training<-Wage[inTrain, ]; testing<-Wage[-inTrain, ]
+
+#"gbm" is boosting with trees; verbose=FALSE gets ride of many intermediate output
+modFit<-train(wage~., method="gbm", data=training, verbose=FALSE)
+#print(modFit) 
+
+qplot(predict(modFit, testing), wage, data=testing)
+```
+
+## Parametric Model (Bayesian update) Prediction
+
+### Key idea
+1. Assume the data follow a probalistic model.   
+For example, if the outcome variable is count data, poisson distribution is appropriate. 
+
+2. Use Bayes' theorem (probability of y in a particular class given the predictors taking on specific values equals to a fraction of the top and the bottom; the numerator being the probability of the features given y in the class times probablity of y in the class; the denominator is the probability of the features) to identify optimal classifiers based on the assumption of the model. 
+
+$$Pr(Y=k|X=x) = \frac{Pr(X=x|Y=k)Pr(Y=k)}{\sum_{\ell=1}^K Pr(X=x|Y=\ell)Pr(Y=\ell)}$$
+
+It is written as:   
+$$Pr(Y=k|X=x) = \frac{f_k(x) \pi_k}{\sum_{\ell = 1}^K f_{\ell}(x) \pi_{\ell}}$$
+Let's write out the multivariate model (many regressors):   
+$$P(Y = k | X_1,\ldots,X_m) = \frac{\pi_k P(X_1,\ldots,X_m| Y=k)}{\sum_{\ell = 1}^K P(X_1,\ldots,X_m | Y=\ell) \pi_{\ell}}$$
+
+Prior probabilities ($f_k(x)$) are specified in advance. A common choice is Gaussian (two parameters, mean and variance; for simplicity, assume off-diagonal covariance matrix elements are zero). Estimate the parameters from the data. Make prediction of y based on the calculated probabilities $Pr(Y=k|X=x)$ - category according to the highest probability. 
+
+Notice that for all observations, the denominator is the same. Hence, maximization of the numerator is equivalent to maximization of the probability. 
+
+$$ \propto \pi_k P(X_1,\ldots,X_m| Y=k)$$
+We apply the Bayes theorem iteratively on each of the $X_1, X_2..., X_m$ and have the following: 
+$$P(X_1,\ldots,X_m, Y=k) = \pi_k P(X_1 | Y = k)P(X_2,\ldots,X_m | X_1,Y=k)$$
+$$ = \pi_k P(X_1 | Y = k) P(X_2 | X_1, Y=k) P(X_3,\ldots,X_m | X_1,X_2, Y=k)$$
+$$ = \pi_k P(X_1 | Y = k) P(X_2 | X_1, Y=k)\ldots P(X_m|X_1\ldots,X_{m-1},Y=k)$$
+
+Several popular models:   
+1. **linear discriminant analysis**: multivariate Gaussian with same covariances  
+2. **quadratic discriminant analysis**: multivariate Gaussian with different covariances   
+3. **naive Bayes**: assumes independent predictors (features are independent)  
+
+Naive Bayes is to assume independence across all Xs, which will allow us write out the probability terms as multiplcative of single feature given a classification. 
+
+$$ \approx \pi_k P(X_1 | Y = k) P(X_2 | Y = k)\ldots P(X_m |,Y=k)$$
+

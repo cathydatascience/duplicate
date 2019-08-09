@@ -1,0 +1,171 @@
+---
+title: "Week1_notes"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Key Words/Concepts of Week 1
+* the process of machine learning 
+* model evaluation   
+  # in and out of sample errors   
+  # specificity and sensitivity   
+  # receiver operating characteristic(ROC) curve   
+* cross validation  
+* resrouces to learn more 
+
+## The process of Machine Learning
+1. start with a question 
+You need to think about what to predict and what you need to predict with. 
+
+2. collect the input data
+The collected data should be directly related to your question. More data trumps better methods. 
+
+3. from data, use measure characteristics or build features that might be useful
+Err on the side of creating more features. 
+
+4. pick an appropriate algorithm 
+It matter less - many models provide similar predictions. 
+
+5. estimate the parameters of the algorithm
+
+6. use the test set to evaluate your model
+Several criteria: interpretable (for example, if-then interpretation in decision tree models), simple, accurate, fast and scalable (which can be applied in big data)
+
+**SPAM example to illustrate the process**
+
+``` {r}
+library(kernlab)
+data(spam)
+#head(spam)
+
+plot(density(spam$your[spam$type=="nonspam"]), col="blue", main="", xlab="Frequency of 'your'")
+lines(density(spam$your[spam$type=="spam"]), col="red")
+abline(v=0.5, col="black")
+
+prediction<-ifelse(spam$your>0.5, "spam", "nonspam")
+table(prediction, spam$type)/length(spam$type)
+```
+
+## Model evaluation
+
+### 1. in and out of sample error rate
+
+* in sample error: the error rate you get on the same data you used to build predictor, a.k.a. resubstitution error
+
+* out of sample error: error rate you get on a new data set, a.k.a. generalization error
+
+* out of sample error is what matters; in sample error always is smaller (the reason is veryfitting and you capture the noise rather the the signal)
+ 
+**Example of in and out of sample error rates** 
+``` {r}
+library(kernlab); data(spam); set.seed(333)
+smallSpam<-spam[sample(dim(spam)[1], size=10),]
+spamLabel<-(smallSpam$type=="spam")*1+1
+plot(smallSpam$capitalAve, col=spamLabel)
+
+rule1<-function(x){
+    prediction<-rep(NA, length(x))
+    prediction[x>2.7]<-"spam"
+    prediction[x<2.4]<-"nonspam"
+    prediction[(x>=2.4 & x<=2.45)]<-"spam"
+    prediction[(x>2.45 & x<=2.7)]<-"nonspam"
+    return(prediction)
+}
+table(rule1(smallSpam$capitalAve), smallSpam$type)
+
+rule2<-function(x){
+    prediction<-rep(NA, length(x))
+    prediction[x>2.8]<-"spam"
+    prediction[x<=2.8]<-"nonspam"
+    return(prediction)
+}
+table(rule2(smallSpam$capitalAve), smallSpam$type)
+
+## apply to the whole dataset
+table(rule1(spam$capitalAve), spam$type)
+
+table(rule2(spam$capitalAve), spam$type)
+
+##accuracy
+sum(rule1(spam$capitalAve)==spam$type)
+
+sum(rule2(spam$capitalAve)==spam$type)
+```
+
+### 2. training, testing and validation sets
+* split data into: training, test, validation (optional)
+
+* use the training set, cross validate to pick features
+* apply only one time your algorithm obtained from training set on the test set or the validation set 
+* good to know the benchmark: make the parameters 0
+
+* avoid small sample sizes - avoid random guessing that prevents learning evaluation
+
+* rules of thumb: 60% training, 20% test, 20% validation for large sample size; medium size uses 60% for training and 40% for testing
+
+* some key principles: never look at your test/validation set (make it as independent as possible from your training set); random time chunks in time-series data
+
+### 3. types of errors: 
+
+_**binary outcome example**_
+* true positive = correctly identified 
+* false positive = incorrectly identified
+* true negative = correctly rejected
+* false negative = incorrectly rejected
+
+The "true" and "false" here mean being "correct" and "incorrect". 
+The "positive" and "negative" mean what the study/research tries to identify. 
+
+The probability of being false positive is also the type I error (under the null, you reject even it is true). 
+The probability of being false negative is the type II error (you incorrectly fail to reject since the alternative is the truth)
+
+* specificity: given that you are sick (the test tries to get), the probability the test identifies you as sick. 
+* sensitivity: given that you are not sick, the probability the test identifies you as not sick. 
+* 2*2 table: accuracy is the probability of correct positive and incorrect negative
+
+* Instead of binary outcome, we may have continuous data and the critera will be mean squared error(MSE or root MSE), median absolute deviation (as opposed to specificity and sensitivity, accuracy for binary data) and also concordance (which is a distance measure, e.g. kappa)
+
+### 4. ROC - receiver operating characteristic curve
+
+[Wiki ROC link](http://en.wikipedia.org/wiki/Receiver_operating_characteristic)
+
+area under the curve (AUC) is a guage of goodness of fit: AUC of above 0.8 considered to be good (the benchmark is the 45 degree line representing random guessing)
+
+## Cross validation
+It is a widely and commonly used technique to detect relevant features and to build models. 
+
+* random subsampling (done with no replacment; can use 0.632bootstrap to do with sampling with rereplacement because of underestimation of error - if you get one right, the same other in the sample that you sample will be right too)
+
+* K fold
+  * large k means less bias, more variance
+  * small k means more bias, less variance
+ 
+* Leave one out 
+
+They are are aiming at reducing the out-of-sample error rate. 
+
+It cannot be emphasized enough that error estimation is on independent data (the subset that you leave out instead of using to build the model). 
+
+## Resources
+* kaggle.com
+
+* heritagehealthprize.com/hhp
+ 
+* caret package in R
+ 
+* elements of statistical learning (free copy of pdf from author's website)
+ 
+* coursera course: standford - machine learning - andrew ng
+ 
+* [List of machine learning resources on Quora](http://www.quora.com/Machine-Learning/What-are-some-good-resources-for-learning-about-machine-learning-Why)
+
+* [List of machine learning resources from Science](http://www.sciencemag.org/site/feature/data/compsci/machine_learning.xhtml)
+
+* [Advanced notes from MIT open courseware](http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-867-machine-learning-fall-2006/lecture-notes/)
+
+* [Advanced notes from CMU](http://www.stat.cmu.edu/~cshalizi/350/)
+
+* [Kaggle - machine learning competitions](http://www.kaggle.com/)

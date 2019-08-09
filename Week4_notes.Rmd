@@ -1,0 +1,470 @@
+---
+title: "Week4_notes"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Key Words/Concepts of Week 4
+
+* Dealing with high-dimensional data
+    + Hard thresholding
+    + Regularized Regressions 
+        * Ridge Regression
+        * Lasso
+* Combined models to improve predictive power - model stacking
+* basic time-series forecasting 
+    + read data from r package `quantmod` 
+    + decompose trend, seasonal and cyclical componenet from the data
+    + construct moving averages
+        * simple moving average
+        * exponential moving average
+* Unsupervised prediction - no type categorization of the outcome variable 
+
+## Dealing with High-dimensional Data
+
+### A motivating example
+$$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \epsilon$$
+
+where $X_1$ and $X_2$ are nearly perfectly correlated (co-linear). You can approximate this model by:
+
+$$Y = \beta_0 + (\beta_1 + \beta_2)X_1 + \epsilon$$
+
+The result is:
+* You will get a good estimate of $Y$  
+* The estimate (of $Y$) will be biased   
+* We may reduce variance in the estimate  
+
+It is essentially a tradeoff between reduced variance and biased estimates. 
+
+### Key idea of regularized regressions
+1. Fit a regression model 
+2. Penalize (or shrink) large coefficients  
+
+__Pros:__
+* Can help with the bias/variance tradeoff when predictors are almost co-linear 
+* Can help with model selection when lasso technique  
+
+__Cons:__
+* May be computationally demanding on large data sets  
+* Does not perform as well as random forests and boosting
+
+### Prostate cancer example
+
+#### A common pattern of RSS as we include more predictors in the model: overfitting in the training set and (kind of) U-shape in testing set
+
+[Code here](http://www.cbcb.umd.edu/~hcorrada/PracticalML/src/selection.R)
+
+```{r prostate}
+library(ElemStatLearn); data(prostate)
+str(prostate)
+
+# regression subset selection in the prostate dataset
+library(ElemStatLearn)
+data(prostate)
+
+covnames <- names(prostate[-(9:10)])
+y <- prostate$lpsa
+x <- prostate[,covnames]
+
+form <- as.formula(paste("lpsa~", paste(covnames, collapse="+"), sep=""))
+summary(lm(form, data=prostate[prostate$train,]))
+
+set.seed(1)
+train.ind <- sample(nrow(prostate), ceiling(nrow(prostate))/2)
+y.test <- prostate$lpsa[-train.ind]
+x.test <- x[-train.ind,]
+
+y <- prostate$lpsa[train.ind]
+x <- x[train.ind,]
+
+p <- length(covnames)
+rss <- list()
+for (i in 1:p) {
+  cat(i)
+  Index <- combn(p,i)
+
+  rss[[i]] <- apply(Index, 2, function(is) {
+    form <- as.formula(paste("y~", paste(covnames[is], collapse="+"), sep=""))
+    isfit <- lm(form, data=x)
+    yhat <- predict(isfit)
+    train.rss <- sum((y - yhat)^2)
+
+    yhat <- predict(isfit, newdata=x.test)
+    test.rss <- sum((y.test - yhat)^2)
+    c(train.rss, test.rss)
+  })
+}
+
+plot(1:p, 1:p, type="n", ylim=range(unlist(rss)), xlim=c(0,p), xlab="number of predictors", ylab="residual sum of squares", main="Prostate cancer data")
+for (i in 1:p) {
+  points(rep(i-0.15, ncol(rss[[i]])), rss[[i]][1, ], col="blue")
+  points(rep(i+0.15, ncol(rss[[i]])), rss[[i]][2, ], col="red")
+}
+minrss <- sapply(rss, function(x) min(x[1,]))
+lines((1:p)-0.15, minrss, col="blue", lwd=1.7)
+minrss <- sapply(rss, function(x) min(x[2,]))
+lines((1:p)+0.15, minrss, col="red", lwd=1.7)
+legend("topright", c("Train", "Test"), col=c("blue", "red"), pch=1)
+```
+    
+#### Hard thresholding
+When the predictors are plenty and the observations are not enough, some coefficient estimates will be set to zero in order to carry out the calculation. 
+
+The idea is to pick the number of predictor estimates to be zero and then figure out what predictor values should not be made zero. Solve:
+
+#### Regularized regression
+In the precense of high collinearity, coefficient estimates tend to be large (a sign of unreliability). We may regularize/shrink the coefficients. 
+
+$$ PRSS(\beta) = \sum_{j=1}^n (Y_j - \sum_{i=1}^m \beta_{1i} X_{ij})^2 + P(\lambda; \beta)$$
+
+where $PRSS$ is a penalized form of the sum of squares. Things that are commonly looked for
+* Penalty reduces complexity  
+* Penalty reduces variance  
+* Penalty respects structure of the problem   
+
+##### Ridge regression
+$$ \sum_{i=1}^N \left(y_i - \beta_0 + \sum_{j=1}^p x_{ij}\beta_j \right)^2 + \lambda \sum_{j=1}^p \beta_j^2$$
+
+equivalent to solving
+
+$\sum_{i=1}^N \left(y_i - \beta_0 + \sum_{j=1}^p x_{ij}\beta_j \right)^2$ subject to $\sum_{j=1}^p \beta_j^2 \leq s$ where $s$ is inversely proportional to $\lambda$ 
+
+The advantage here is even in high-dimension data that $X'X$ is not invertible, ridge regression can still be fit by including $\lambda$. 
+
+When $\lambda$ is zero, we have the OLS estimates. When $\lambda$ approaches infinity, all the $\beta s$ will converge to zero. 
+
+```{r}
+library(MASS)
+lambdas <- seq(0,50,len=10) #10 lambdas that go up in value
+M <- length(lambdas) 
+train.rss <- rep(0,M) 
+test.rss <- rep(0,M)     
+betas <- matrix(0,ncol(x), M) #each column to store coefficient estimates for each lambda
+
+#estimation and storing results
+for(i in 1:M){
+  Formula <-as.formula(paste("y~",paste(covnames,collapse="+"),sep="")) #use the full model on all lambdas
+  fit1 <- lm.ridge(Formula,data=x,lambda=lambdas[i])
+  betas[,i] <- fit1$coef
+  
+  scaledX <- sweep(as.matrix(x),2,fit1$xm)
+  scaledX <- sweep(scaledX,2,fit1$scale,"/")
+  yhat <- scaledX%*%fit1$coef+fit1$ym
+  train.rss[i] <- sum((y - yhat)^2)
+  
+  scaledX <- sweep(as.matrix(x.test),2,fit1$xm)
+  scaledX <- sweep(scaledX,2,fit1$scale,"/")
+  yhat <- scaledX%*%fit1$coef+fit1$ym
+  test.rss[i] <- sum((y.test - yhat)^2)
+}
+
+#plots of RSS on the training and test sets, and coefficients
+plot(lambdas,test.rss,type="l",col="red",lwd=2,ylab="RSS",ylim=range(train.rss,test.rss))
+lines(lambdas,train.rss,col="blue",lwd=2,lty=2)
+best.lambda <- lambdas[which.min(test.rss)]
+abline(v=best.lambda+1/9)
+
+plot(lambdas,betas[1,],ylim=range(betas),type="n",ylab="Coefficients")
+for(i in 1:ncol(x))
+  lines(lambdas,betas[i,],type="b",lty=i,pch=as.character(i))
+abline(h=0)
+legend("topright",covnames,pch=as.character(1:8))
+legend(30,30,c("Train","Test"),col=c("blue","red"),lty=c(2,1))
+```
+
+From the ridge coefficient paths, we see that as lambda rises (more penality being placed on coefficients), coefficients go towards zero. When lambda is zero, it is just the least square regression estimates. 
+
+##### Lasso 
+$\sum_{i=1}^N \left(y_i - \beta_0 - \sum_{j=1}^p x_{ij}\beta_j \right)^2$ subject to $\sum_{j=1}^p |\beta_j| \leq s$ 
+
+It also has a lagrangian form: 
+
+$$ \sum_{i=1}^N \left(y_i - \beta_0 - \sum_{j=1}^p x_{ij}\beta_j \right)^2 + \lambda \sum_{j=1}^p |\beta_j|$$
+For **orthonormal design matrices (not the norm!)** this has a closed form solution:
+
+$$\hat{\beta}_j = sign(\hat{\beta}_j^0)(|\hat{\beta}_j^0| - \gamma)^{+}$$
+Although the above result is not general, some prefer it because it helps with model selection when some $\beta s$ are set to zero. 
+
+```{r}
+library(lars)
+lasso.fit <- lars(as.matrix(x), y, type="lasso", trace=TRUE)
+
+plot(lasso.fit, breaks=FALSE)
+legend("topleft", covnames, pch=8, lty=1:length(covnames), col=1:length(covnames))
+
+# this plots the cross validation curve
+lasso.cv <- cv.lars(as.matrix(x), y, K=10, type="lasso", trace=TRUE)
+```
+
+##### Caret Package
+In `caret` package, the methods are `ridge`, `lasso`, `relaxo`. 
+
+
+## Combining models to increase predictive power - model stacking
+
+### Basic idea of using majority vote
+
+Suppose we have 5 completely independent classifiers. 
+
+If accuracy is 70% for each:
+
+  * $10\times(0.7)^3(0.3)^2 + 5\times(0.7)^4(0.3)^2 + (0.7)^5$
+
+  * 83.7% majority vote accuracy
+
+Then, With 101 independent classifiers: 
+
+  * 99.9% majority vote accuracy
+
+### Approaches for combining classifiers
+1. Bagging, boosting, random forests
+
+  * Usually combine *similar* classifiers
+
+2. Combining different classifiers
+
+  * Model stacking (the focus of the section)
+
+  * Model ensembling
+
+### wage data example
+```{r wage}
+
+library(ISLR); data(Wage); library(ggplot2); library(caret);
+
+Wage <- subset(Wage,select=-c(logwage))
+
+# Create a building data set and validation set
+inBuild <- createDataPartition(y=Wage$wage, p=0.7, list=FALSE)
+validation <- Wage[-inBuild,]; buildData <- Wage[inBuild,]
+
+# Create both a training and test set with the building data set
+inTrain <- createDataPartition(y=buildData$wage, p=0.7, list=FALSE)
+training <- buildData[inTrain,]; testing <- buildData[-inTrain,]
+```
+
+### Build two different models
+```{r modFit,dependson="wage", warning=FALSE, message=FALSE}
+mod1 <- train(wage ~.,method="glm",data=training)
+
+mod2 <- train(wage ~.,method="rf", data=training, trControl = trainControl(method="cv"), number=3)
+```
+
+Two different classifiers: one is glm and the other is random forest. 
+
+### Predict on the testing set 
+```{r predict,dependson="modFit",fig.height=4,fig.width=6}
+pred1 <- predict(mod1,testing); pred2 <- predict(mod2,testing)
+
+qplot(pred1,pred2,colour=wage,data=testing)
+```
+
+From the graph, you can see that they are close to one another, but not agree 100%. 
+
+### Fit a model that combines predictors
+```{r combine,dependson="predict"}
+#build a new dataset that uses the test dataset
+predDF <- data.frame(pred1,pred2,wage=testing$wage)
+
+combModFit <- train(wage ~.,method="gam",data=predDF)
+
+combPred <- predict(combModFit,predDF)
+```
+
+### Testing errors
+
+```{r ,dependson="combine"}
+sqrt(sum((pred1-testing$wage)^2))
+
+sqrt(sum((pred2-testing$wage)^2))
+
+sqrt(sum((combPred-testing$wage)^2))
+```
+
+Notice that the test set has been used to train the combined model and hence we need to do it on the new validation set (that's why we need three datasets). 
+
+### Predict on validation data set
+
+```{r validation,dependson="combine"}
+pred1V <- predict(mod1,validation); pred2V <- predict(mod2,validation)
+
+predVDF <- data.frame(pred1=pred1V,pred2=pred2V)
+
+combPredV <- predict(combModFit,predVDF)
+```
+
+### Evaluate on validation
+```{r ,dependson="validation"}
+sqrt(sum((pred1V-validation$wage)^2))
+
+sqrt(sum((pred2V-validation$wage)^2))
+
+sqrt(sum((combPredV-validation$wage)^2))
+```
+
+The combined model has a lower error rate which shows model stacking improves accuracy. 
+
+## Basic time series forecasting
+
+Data are dependent over time and they have specific pattern types like trends(long term increase/decrease), seasonal patterns(patterns related to week, month, year etc.) and cycles(patterns that rise/fall periodically). Subsampling into training/test is more complicated. 
+
+Similar issues arise in spatial data. 
+
+Typically goal is to predict one or more observations into the future. 
+
+### Read in Google stock price data using `quantmod`
+```{r loadGOOG}
+library(quantmod)
+from.dat <- as.Date("01/01/08", format="%m/%d/%y")
+to.dat <- as.Date("12/31/13", format="%m/%d/%y")
+
+getSymbols("GOOG", src="yahoo", from = from.dat, to = to.dat)
+
+head(GOOG)
+```
+
+### Summarize monthly and store as time series
+
+```{r tseries,dependson="loadGOOG",fig.height=4,fig.width=4}
+require("forecast")
+mGoog <- to.monthly(GOOG)
+googOpen<-Op(mGoog) #take the opening price of Google
+
+ts1 <- ts(googOpen,frequency=12) #specify it's time series and monthly data
+
+plot(ts1,xlab="Years+1", ylab="GOOG")
+```
+
+### Example time series decomposition
+
+* __Trend__  - Consistently increasing pattern over time 
+
+* __Seasonal__ -  When there is a pattern over a fixed period of time that recurs.
+
+* __Cyclic__ -  When data rises and falls over non fixed periods
+
+[https://www.otexts.org/fpp/6/1](https://www.otexts.org/fpp/6/1)
+
+```{r ,dependson="tseries",fig.height=4.5,fig.width=4.5}
+#decompose into a series of patterns: trend, seasons and cycle
+plot(decompose(ts1),xlab="Years+1")
+
+```
+
+### Splitting into training and test sets
+
+```{r trainingTest,dependson="tseries",fig.height=4.5,fig.width=4.5}
+ts1Train <- window(ts1,start=1,end=5)
+ts1Test <- window(ts1,start=5,end=(7-0.01))
+
+ts1Train
+```
+
+### Moving Averages - smoothing the data
+
+#### Simple Moving Average
+$$ Y_{t}=\frac{1}{2*k+1}\sum_{j=-k}^k {y_{t+j}}$$
+```{r ,dependson="trainingTest",fig.height=4.5,fig.width=4.5}
+plot(ts1Train)
+
+lines(ma(ts1Train,order=3),col="red")
+```
+
+#### Exponential smoothing
+
+__Example - simple exponential smoothing__
+
+$$\hat{y}_{t+1} = \alpha y_t + (1-\alpha)\hat{y}_{t-1}$$
+```{r ets,dependson="trainingTest",fig.height=4.5,fig.width=4.5}
+ets1 <- ets(ts1Train,model="MMM") #first letter is error type; second letter denotes the trend type: monthly; third letter the season type; M = multiplicative  
+
+fcast <- forecast(ets1)
+
+plot(fcast); lines(ts1Test,col="red")
+```
+
+### Get the accuracy measaure
+
+```{r ,dependson="ets",fig.height=4.5,fig.width=4.5}
+accuracy(fcast,ts1Test)
+```
+
+### Notes and further resources
+* [Forecasting and timeseries prediction](http://en.wikipedia.org/wiki/Forecasting) is an entire field
+
+* Rob Hyndman's [Forecasting: principles and practice](https://www.otexts.org/fpp/) is a good place to start
+
+* Cautions: 
+
+  * Be wary of spurious correlations
+
+  * Be careful how far you predict (extrapolation)
+
+  * Be wary of dependencies over time
+
+* See [quantmod](http://cran.r-project.org/web/packages/quantmod/quantmod.pdf) or [quandl](http://www.quandl.com/help/packages/r) packages for finance-related problems.
+
+
+## Unsupervised Prediction
+
+### Key ideas
+* Sometimes you don't know the labels for the outcome variable. 
+
+* You will need to: 
+
+  * Create clusters (for example, use k-means)
+
+  * Name the clusters (i.e. interpret your results from the previous step)
+
+  * Build predictor for the clusters (build the model to explain; in previous problem, we know what we try to predict, so we are in this step right away)
+
+* In a new data set (test set or validation set)
+
+  * Predict clusters
+  
+### Iris example ignoring species labels
+
+```{r iris}
+data(iris); library(ggplot2)
+inTrain <- createDataPartition(y=iris$Species, p=0.7, list=FALSE)
+
+training <- iris[inTrain,]; testing <- iris[-inTrain,]
+dim(training); dim(testing)
+```
+
+### Cluster with k-means
+
+```{r kmeans,dependson="iris",fig.height=4,fig.width=6}
+kMeans1 <- kmeans(subset(training,select=-c(Species)),centers=3)
+
+training$clusters <- as.factor(kMeans1$cluster)
+
+qplot(Petal.Width,Petal.Length,colour=clusters,data=training)
+```
+
+### Compare to real labels
+
+```{r ,dependson="kmeans"}
+table(kMeans1$cluster,training$Species)
+```
+
+### Build model with predictors
+
+```{r modelFit,dependson="kmeans"}
+modFit <- train(clusters ~.,data=subset(training,select=-c(Species)),method="rpart")
+
+table(predict(modFit,training),training$Species)
+```
+
+### Apply on test set
+
+```{r ,dependson="modFit"}
+testClusterPred <- predict(modFit,testing) 
+
+table(testClusterPred ,testing$Species)
+```
+
+

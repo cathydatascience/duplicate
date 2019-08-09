@@ -1,0 +1,458 @@
+---
+title: "Week2_notes"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Key Words/Concepts of Week 2
+
+* `caret` package in R
+* Ways to split the dataset  
+  # one-time random sampling    
+  # k-fold cross validation  
+  # bootstrap resampling   
+  # time series data - time slices  
+  # modify arguments in the `train` function  
+* Exploratory analysis  
+  # plot the predictor  
+* Preprocess the data   
+      * standardize the predictor(s) and Box-cox transformation
+      * impute missing values
+      * Deal with near collinearity in the predictors  
+            # find the near zero variance variables (plus: 1. create dummy variables; 2. use spline to add curvature to predictors) 
+            # principal component analysis (PCA)
+* Examples: Regression with a continuous outcome variable   
+  # single predictor   
+  # multiple regressors  
+
+## `caret` Page in R
+
+### commands
+
+* data cleaning: `preProcess`
+* (within the training set) data splitting: `createDataPartition`; `createResample`; `createTimeSlices`
+* training/testing functions: `train`; `predict`
+* model comparison: `confusionMatrix` (binary and categorical data)
+
+`caret` packages provides a **_unifying_** framework on many machine learning algorithms (linear discriminant analysis ....). Each one will produce an object as outcome which requires the input of `type=...`, but `caret` package eliminates that need. 
+
+### example
+``` {r message=FALSE, warning=FALSE}
+library(caret); library(kernlab); data(spam)
+inTrain<-createDataPartition(y=spam$type, p=0.75, list=FALSE) #75% of to train and the remainder to test
+training<-spam[inTrain, ]
+testing<-spam[-inTrain, ]
+dim(training)
+
+set.seed(2342)
+modelFit<-train(type~., data=training, method="glm")
+modelFit
+modelFit$finalModel
+
+predictions<-predict(modelFit, newdata=testing) #pass the object "modelFit" got from the train function
+head(predictions) #show the first 6 predictions
+
+confusionMatrix(predictions, testing$type) #report the 2*2 table (TP and FN etc.)
+```
+
+### helpful links for `caret` package
+* `caret` tutorials:  
+        * [http://www.edii.uclm.es/~useR-2013/Tutorials/kuhn/user_caret_2up.pdf](http://www.edii.uclm.es/~useR-2013/Tutorials/kuhn/user_caret_2up.pdf)   
+        * [http://cran.r-project.org/web/packages/caret/vignettes/caret.pdf](http://cran.r-project.org/web/packages/caret/vignettes/caret.pdf)
+        
+* A paper introducing the `caret` package:   
+        * [http://www.jstatsoft.org/v28/i05/paper](http://www.jstatsoft.org/v28/i05/paper)
+
+
+## Splitting the dataset into training, testing sets  
+
+It is often useful to set an overall seed for repeatable experiments since most procedures involve random sampling. When you share your model/data with collaborators, they will get the same results. 
+
+### One-time random sample 
+* this has been used in the previous example - the original data is split to training and testing sets (you can specify the proportioin in setting the argument `p=...`)
+
+``` {r}
+library(caret); library(kernlab); data(spam)
+inTrain<-createDataPartition(y=spam$type, p=0.75, list=FALSE)
+training<-spam[inTrain, ]
+testing<-spam[-inTrain, ]
+dim(training)
+```
+
+### K fold cross validation
+``` {r}
+set.seed(13422)
+folds<-createFolds(y=spam$type, k=10, list=TRUE, returnTrain=TRUE) #createFolds is a function in caret package. You supply the variable to be split on in the argument of "y=..."
+sapply(folds, length) #folds is a list and check the length of each of the ten folds
+
+folds[[1]][1:10] #show the observations actually contained in the first fold. The first ten elements of the first element of the fold's list correspond to the first ten observations of the sample 
+
+## Training set
+dim(spam[folds[[1]], ])
+
+folds<-createFolds(y=spam$type, k=10, list=TRUE, returnTrain=FALSE) #argument "returnTrain=FALSE" means to return TESTING set 
+
+folds[[1]][1:10] #similarly, you can see the actual observations included in the first test set in k-fold validation
+
+## Test set 
+dim(spam[folds[[1]], ])
+```
+
+
+### Random resampling or Bootstrap
+``` {r}
+set.seed(432525)
+folds<-createResample(y=spam$type, times=10, list=TRUE) 
+sapply(folds, length)
+
+folds[[1]][1:10] #you may see observations repeated because resampling is done with replacement
+```
+
+### Time slices - for time-series forecasting
+``` {r}
+set.seed(213432)
+tme<-1:1000
+folds<-createTimeSlices(y=tme, initialWindow=20, horizon=10)
+names(folds)
+
+folds$train[[1]] ##continuous from 1 to 20; the argument "initialWindow=20"
+folds$test[[1]] ##the next 10 for prediction; the argument "horizon=10"
+
+#the next slice will shift over accordingly and they are continuous in time
+```
+
+### Training options
+``` {r eval=FALSE}
+library(caret); library(kernlab); data(spam)
+inTrain<-createDataPartition(y=spam$type, p=0.75, list=FALSE)
+training<-spam[inTrain, ]
+testing<-spam[-inTrain, ]
+
+modelFit<-train(type~., data=training, method="glm") #accept defaults
+
+#evaluation metric: for continuous outcome variable, it is RMSE the algorithm tries to minimize. You could use R-squared, more suitable for linear setting; for factor outcome variable, it is the accuracy the algorithm tries to maximize
+?train.default
+
+#allows you to be more precise about the way you train the model; method options are available for all the above discussed methods
+args(trainControl) 
+```
+
+## Exploratory Analysis (of the outcome variable)
+
+One key element is to understand how the data actually look and how they interact with each other. Best way to do this is to use plots. 
+
+The below example is from the ISLR package from the book: _Introduction to statistical learning_
+
+``` {r}
+library(ISLR); library(ggplot2); library(caret); library(Hmisc); library(gridExtra)
+data(Wage)
+summary(Wage) 
+
+inTrain<-createDataPartition(y=Wage$wage, p=0.7, list=FALSE)
+training<-Wage[inTrain, ]
+testing<-Wage[-inTrain, ]
+dim(training); dim(testing)
+
+featurePlot(x=training[, c("age", "education", "jobclass")], y=training$wage, plot="pairs") #variables plot against one another
+
+qplot(age, wage, data=training) #two groups
+qplot(age, wage, colour=jobclass, data=training) #color-coded with job class: industrial vs information; high-wage earners mostly belong to the information jobs
+
+qq<-qplot(age, wage, color=education, data=training)
+qq+geom_smooth(method="lm", formula=y~x) #apply a linear smoother on each class of eduction
+
+cutWage<-cut2(training$wage, g=3) #cut2 in Hmisc package, g argument specified number of groups to be divided; it breaks dataset into factors based on quantile groups
+p1<-qplot(cutWage, age, data=training, fill=cutWage, geom=c("boxplot"))
+p1
+
+p2<-qplot(cutWage, age, data=training, fill=cutWage, geom=c("boxplot", "jitter"))
+grid.arrange(p1, p2, ncol=2) #generate two plots (boxplot and boxplot with points overlaying on top) side by side; desirable for many points that drive the trend (not obscured by just a few points)
+
+t1<-table(cutWage, training$jobclass)
+t1
+prop.table(t1, 1) #option: 1 is the row and 2 is column percentage
+
+qplot(wage, colour=education, data=training, geom="density") #density plot of wages shows double peaks for advanced-degree and college-degree holders, which is not shown in the box-plot. 
+```
+
+A list of things to keep in mind:       
+    1. make plots only in training set    
+    2. imbalance in outcomes/predictors
+        * value of predictor almost all in one outcome group and not the other is an indicator that it is a good predictor  
+        * when outcome value predominently belongs to one group leaving few to the other, it is difficult to build a predictive model  
+    3. outliers (which may suggest missing variable)  
+    4. groups of points not explained by a predictor on the graph (suggesting another variable in play)   
+    5. skewed variables  
+        * The remedy is to transform the data - make less skewed and more normal in regression model  
+
+## Preprocess the data
+        
+### standardize the predictor(s) and Box-cox transformation
+``` {r message=FALSE, warning=FALSE}
+library(caret); library(kernlab); data(spam)
+inTrain <- createDataPartition(y=spam$type, p=0.75, list=FALSE)
+
+training <- spam[inTrain,]
+testing <- spam[-inTrain,]
+
+hist(training$capitalAve, main="", xlab="ave. capital run length")
+
+mean(training$capitalAve) 
+sd(training$capitalAve) #very skewed
+
+#standardize the variable where the sd is 1 (greatly reduced the skewness)
+trainCapAve<-training$capitalAve
+trainCapAveS<-(trainCapAve-mean(trainCapAve))/sd(trainCapAve)
+mean(trainCapAve)
+
+## KEY! standardizing in the test set: use only parameters estimated from training set
+testCapAve<-testing$capitalAve
+testCapAveS<-(testCapAve-mean(trainCapAve))/sd(trainCapAve) #the mean and sd will not be 0 and 1
+
+## preProcess function to perform similar functions
+preObj<-preProcess(training[, -58], method=c("center", "scale")) # 58th vbl is the actual outcome
+trainCapAveS<-predict(preObj, training[, -58])$capitalAve
+mean(trainCapAveS); sd(trainCapAveS)
+
+## value calculated from preObj to apply to the test
+settestCapAveS<-predict(preObj, testing[, -58])$capitalAve 
+mean(testCapAveS); sd(testCapAveS)
+
+#Alternatively, use preProcess argument in the train function
+set.seed(32422)
+modelFit<-train(type~., data=training, preProcess=c("center", "scale"), method="glm")
+```
+
+Besides centering and scaling, we can use Box-Cox transforms. 
+
+``` {r message=FALSE, warning=FALSE}
+##take continuous data and try to make them look more normal (use maximum likelihood)
+preObj<-preProcess(training[, -58], method=c("BoxCox")) 
+trainCapAveS<-predict(preObj, training[, -58])$capitalAve
+
+par(mfrow=c(1, 2)); hist(trainCapAveS); qqnorm(trainCapAveS) #success depends on the data quirks
+```
+
+### Impute the missing values
+``` {r}
+set.seed(342435)
+
+#make some values NA
+training$capAve<-training$capitalAve
+selectNA<-rbinom(dim(training)[1], size=1, prob=0.05)==1
+training$capAve[selectNA]<-NA
+
+#impute 
+preObj<-preProcess(training[, -58], method="knnImpute") #knn - k nearest neighbour
+capAve<-predict(preObj, training[, -58])$capAve
+
+#standardize true values
+capAveTruth<-training$capitalAve
+capAveTruth<-(capAveTruth-mean(capAveTruth))/sd(capAveTruth)
+
+#check if the imputation is good 
+quantile(capAve-capAveTruth) #if good, shall be close to zero
+
+quantile((capAve-capAveTruth)[selectNA]) #more variation in the comparison between imputed and true values
+
+quantile((capAve-capAveTruth)[!selectNA])
+```
+
+### Near collinearity predictor(s)
+``` {r}
+library(ISLR); library(caret); data(Wage)
+inTrain<-createDataPartition(y=Wage$wage, p=0.7, list=FALSE)
+training<-Wage[inTrain, ]; testing<-Wage[-inTrain, ]
+
+## turn factor/qualitative vbl to dummy/indicator vbl
+table(training$jobclass) #two types: Industrail vs Information
+
+dummies<-dummyVars(wage~ jobclass, data=training) #dummyVar in caret package
+head(predict(dummies, newdata=training)) #creates two dummy variables
+
+nsv<-nearZeroVar(training, saveMetrics=TRUE) #can drop the nzv column with true values: near-zero-variable 
+
+#identify the index location of nearZeroVar variables and drop them right away
+nsv<-nearZeroVar(training)
+train.data<-training[, -nsv]
+dim(train.data)
+
+## spline basis
+library(splines)
+bsBasis<-bs(training$age, df=3) #up to cubic relation of predictor to outcome; bs is the basis function
+
+lm1<-lm(wage~bsBasis, data=training)
+plot(training$age, training$wage, pch=19, cex=0.5)
+points(training$age, predict(lm1, newdata=training), col="red", pch=19, cex=0.5)
+
+## splines on the test set
+prediction1<-predict(bsBasis, age=testing$age) ## VERY IMPORTANT: use the calculated parameters in the training set and apply to vbls to be transformed in test set
+```
+
+### Principal Components Analysis (PCA)
+The goal is to capture as much variation as possible (you can specify the proportion of variation explained for selecting number of variables) with fewer variables. After transformation, we use a (linear) combination of the original predictors.  
+
+``` {r message=FALSE, warning=FALSE}
+library(caret); library(kernlab); data(spam)
+inTrain<-createDataPartition(y=spam$type, p=0.75, list=FALSE)
+
+training<-spam[inTrain, ]
+testing<-spam[-inTrain, ]
+
+M<-abs(cor(training[, -58])) #abs of the correlation of vbl pairs
+diag(M)<-0 #not interested in vbl in itself s ince they are all 1
+which(M>0.8, arr.ind=T) #display vbls
+
+names(spam)[c(34, 32)]
+
+plot(spam[, 34], spam[, 32])
+
+#in essense is to use weighted combination of predictors
+#benefits: reduce number of predictors and reduce noise
+
+## one possibility
+X<-0.71*training$num415+0.71*training$num857
+Y<-0.71*training$num415-0.71*training$num857
+plot(X, Y) #variation concentrates on X
+
+## find a new set of multivariate vbls that are uncorrelated and explain as much var as possible (statistical); and then put all the vbls together in one matrix and find the best matrix created with fewer variables (lower rank) that explains the original data (data compression)
+
+# SVD (singular value decomposition)
+# PCA - the right singular values if you first scale the vbls (normalize)
+
+smallSpam<-spam[, c(34, 32)]
+prComp<-prcomp(smallSpam)
+plot(prComp$x[, 1], prComp$x[, 2]) #very similar to the previous plot; extendable to multivariates
+prComp$rotation #explains how the weights from the previous exercise are obtained
+
+#PCA extends to the entire dataset 
+typeColor<-((spam$type=="spam")*1+1)
+prComp<-prcomp(log10(spam[, -58]+1)) #transform skewed vbls to be more Gaussian
+plot(prComp$x[, 1], prComp$x[, 2], col=typeColor, xlab="PC1", ylab="PC2")
+
+## plot the variance explained by different number of PCAs
+prComp<-prcomp(training[, -58], scale.=TRUE)
+std_dev<-prComp$sdev
+pr_var<-std_dev^2
+prop_varex<-pr_var/sum(pr_var)
+sum(prop_varex[1:48])
+
+plot(cumsum(prop_varex), xlab="Principal Component", ylab="Cumulative Proportioin of Variance Explained", type="b")
+abline(h=0.95, col="red", v=48)
+
+## Do it in Caret: 
+#PCA with caret where you specify the number of principal components to be 2
+preProc<-preProcess(log10(spam[, -58]+1), method="pca", pcaComp=2)
+spamPC<-predict(preProc, log10(spam[, -58]+1))
+plot(spamPC[, 1], spamPC[, 2], col=typeColor)
+
+## training set and then test set
+preProc<-preProcess(log10(training[, -58]+1), method="pca", pcaComp=2)
+trainPC<-predict(preProc, log10(training[, -58]+1))
+#modelFit<-train(training$type~., method="glm", data=trainPC)
+modelFit <- train(x = trainPC, y = training$type,method="glm")
+
+testPC<-predict(preProc, log10(testing[, -58]+1))
+confusionMatrix(testing$type, predict(modelFit, testPC))
+
+#alternative which combines the PreProcess and predict functions
+modelFit<-train(type~., method="glm", preProcess="pca", data=training)
+#modelFit <- train(x = trainPC, y = training$type,method="glm", preProcess="pca")
+confusionMatrix(testing$type, predict(modelFit, testing))
+```
+
+PCA most useful for linear-type models, but it can be hard to interpret predictors. 
+Watch out for outliers - look at exploratory plots and transform with logs/Box Cox first. 
+## Predicting with regression models
+
+### Simple Linear Regression (one predictor)
+
+```{r message=FALSE, warning=FALSE}
+library(caret); data(faithful); set.seed(333)
+inTrain<-createDataPartition(y=faithful$waiting, p=0.5, list=FALSE)
+trainFaith<-faithful[inTrain, ]; testFaith<-faithful[-inTrain, ]
+head(trainFaith)
+
+lm1<-lm(eruptions~waiting, data=trainFaith)
+summary(lm1)
+
+plot(trainFaith$waiting, trainFaith$eruptions, pch=19, col="blue", xlab="Waiting", ylab="Duration")
+lines(trainFaith$waiting, lm1$fitted, lwd=3)
+
+#make a prediction with specific wait time = 80 
+coef(lm1)[1]+coef(lm1)[2]*80
+
+#prediction alternative: give a new data frame
+newdata<-data.frame(waiting=80) 
+predict(lm1, newdata) #newdata need to be dataframe
+
+## Plot predictions - training and test
+par(mfrow=c(1, 2))
+plot(trainFaith$waiting, trainFaith$eruptions, pch=19, col="blue", xlab="Waiting", ylab="Duration")
+lines(trainFaith$waiting, predict(lm1), lwd=3)
+plot(testFaith$waiting, testFaith$eruptions, pch=19, col="blue", xlab="Waiting", ylab="Duration")
+lines(testFaith$waiting, predict(lm1, newdata=testFaith), lwd=3)
+
+#Prediction accuracy: calculate the RMSE on training
+sqrt(sum((lm1$fitted-trainFaith$eruptions)^2)) #5.75
+
+sqrt(sum((predict(lm1, newdata=testFaith)-testFaith$eruptions)^2)) #5.84 (almost always larger)
+
+#prediction intervals
+pred1<-predict(lm1, newdata=testFaith, interval="prediction")
+ord<-order(testFaith$waiting)
+plot(testFaith$waiting, testFaith$eruptions, pch=19, col="blue")
+matlines(testFaith$waiting[ord], pred1[ord, ], type="l", col=c(1,2,2), lty=c(1,1,1), lwd=3)
+
+## same process with caret
+modFit<-train(eruptions ~ waiting, data=trainFaith, method="lm")
+summary(modFit$finalModel)
+```
+
+### Multiple Linear Regression
+```{r message=FALSE, warning=FALSE}
+library(ISLR); library(ggplot2); library(caret); 
+data(Wage); Wage<-subset(Wage, select=-c(logwage)) #select out the variable we try to predict
+summary(Wage)
+
+#separate dataset into training and testing set
+inTrain<-createDataPartition(y=Wage$wage, p=0.7, list=FALSE)
+training<-Wage[inTrain, ]; testing<-Wage[-inTrain, ]
+dim(training); dim(testing)
+
+#Feature plot
+featurePlot(x=training[, c("age", "education", "jobclass")], y=training$wage, plot="pairs")
+
+# plot age vs wage
+qplot(age, wage, data=training) #seems to be two groups and need to figure out what variable may explain the difference
+qplot(age, wage, colour=jobclass, data=training)
+qplot(age, wage, colour=education, data=training) #both seem to have explanatory power
+
+# fit a linear model
+modFit<-train(wage~age+jobclass+education, method="lm", data=training) #by default, the factor variables automatically changed to dummy/indicator variables
+finMod<-modFit$finalModel
+print(modFit)
+
+# diagnostics
+plot(finMod, 1, pch=19, cex=0.5, col="#00000010") #fitted values VS residuals plot - would prefer the line stays at zero
+
+#color by variables not used in the model to see if outliers can be explained by the variable excluded in the model
+qplot(finMod$fitted, finMod$residuals, colour=race, data=training)
+
+#plot by (row) index - prefer no trend but if there is, it is likely an omitted variable problem (sth that is rising with a continuous variable like time and age)
+plot(finMod$residuals, pch=19)
+
+#plot predicted vs truth in the test set - ideally, a 45 degree line (!!! cannot use the insight to update your model)
+pred<-predict(modFit, testing)
+qplot(wage, pred, colour=year, data=testing)
+
+#use all covariates
+modFitAll<-train(wage~., data=training, method="lm")
+pred<-predict(modFitAll, testing)
+qplot(wage, pred, data=testing)
+```
+
+

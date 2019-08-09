@@ -1,0 +1,38 @@
+---
+title: "Welcome to my Coursera Data Science Class: Practical Machine Learning - the 8th class website"
+author: "Cathy Gao"
+date: "August 6, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Overview  
+
+The class is closely related to statistics, that is, using statistical methods to make predictions from the data. The focus is on implementation of the methods/algorithms using the `caret` package in R and also on interpretation of the results (both the standard output such as model performance measures and coefficient tables, and the graphs that come with the commands).
+
+It is built on the regression concepts of the previous class (**Regression Models**) in the data certification class series. The former leans more towards teasing out the causal relationship between the outcome variable and the predictors while this class is on making accurate prediction. 
+
+### My learning experience
+I learned a lot from the class lectures and also from completing the class project. Besides working on the class material, I also searched the new terms, how to implement and interprete a function, and what the error messages online, which improve my understanding of the topic and enhance my learning experience. I highly recommend the class.  
+
+On week 1, the basic concepts like the procedure of machine learning, in and out of sample error, different ways to do cross validation, and how to measure the model performance are introduced. My experience is that some terminologies, like specificity and sensitivity, and false positive (type I error) and false negative (type II error) can be confusing. The 2*2 table helps to clarify the above concepts. When it comes to the receiver operating characteristics(ROC) curve, I benefit from reading the [article](https://www.kovcomp.co.uk/support/XL-Tut/life-ROC-curves-receiver-operating-characteristic.html). It shows you how to construct the ROC curve from an actual dataset. 
+
+Week 2 is about splitting data into training, test and/or validation sets, and the `caret` package in R. The package is the key tool for the class assignments and the final project. It integrates the many methods/algorithms in a unified framework. We can use the same commands to call the differnt methods (such as `glm`, `rf`, `gbm` etc.). K-fold validation, techniques to preprocess the data (such as standardization of predictors, imputation of missing values, and principal component analysis (PCA)) are also discussed here. 
+
+Week 3 deals with a categorical outcome variable. A tip is if the variable is numeric, you change it to a factor variable. Otherwise, the prediction will be numeric which is hard to interpret. The methods discussed are decision tree,  random forest (a method of bagging) and grandient boosting. The latter two are popular in data science because they provide high accuracy. The instructor took time to explain the key ideas and the output from the commands. Each video clip is relative short, no longer than 15 minutes each, but you really need to spend time to watch and re-watch them to keep up if you have little background. 
+
+Week 4 puts together an introduction of several topics: time-efficient (may at the expense of accuracy) methods on regularized regressions - __ridge regression and lasso__, model stacking which is to combine several different types of methods like random forest and gradient boosting to improve accuracy, time series data analysis using financial data from `quantmod` package, and unsupervised prediction (when we don't know labels of the outcome variable).  
+
+Week 1 quiz is about understanding the concepts and no coding involved. I attached my codes on the following weeks' assignments. Some of them were difficult and wording can be confusing. However, looking back, I do feel that they help to reinforce and deepen my understanding of the material covered in the week. It is true that learning is a process: by going through confusion, you gain clarity.
+
+Finally, the class project, which turns out to be the highlight of my class experience. I was lost in the beginning and did not even know where to start. It seemed that I learned so much - the key idea, the methods, the R codes and the output interpetation, and each method may be implemented and potentially could be the answer. The class forum is helpful not only that you find out you are not alone, but also people post helpful hints/suggestions. The [study material site](https://github.com/lgreski/datasciencectacontent) (for all the 10 classes in the certification course) is worthy of bookmarking and visiting often (I should have found out about it earlier!). For a full disclosure, I did browse a couple of finished papers to get an idea of what was expected. I also found it very helpful to learn about the process and how I will be able to improve upon their methods. When I worked on the paper, I googled a lot to look up R commands, a method and tutorials. What ended up in my project paper is not just what has been covered in the class, but with relevant and improved information. After running several models and comparing their performances, I had the structure of the paper in mind. It took a couple of days to put it together, polishing the format and the wording until I am happy with the final version overall. Again, like other people said it before: how much you took out from the class depends on how much you put in. I feel like I learn a lot about the new methods and have a project to show it :) 
+
+I have just received the class certificate and want to write out my experience while it is still fresh in my mind. It is a challenging class for me and I really like it. I hope you may find the class material helpful. 
+
+[Practical Machine Learning Class website](https://www.coursera.org/learn/practical-machine-learning)
+
+**__P.S.__** I also post a guide on how to publish your class project online using Github (the right hand corner on the top of the page). If you are interested, check it out. 
+
