@@ -1,0 +1,41 @@
+name: "Practical Machine Learning
+(Course8 of JHU Data Science Certification)"
+output_dir: "docs"
+navbar:
+  title: "Class Material"
+  left:
+  - text: "Practical Machine Learning"
+    href: index.html
+  - text: "Project Paper"
+    href: https://cathydatascience.github.io/PracticalMachineLearning_Project/
+  - text: "Notes"
+    menu:
+      - text: "Week 1"
+        href: Week1_notes.html
+      - text: "Week 2"
+        href: Week2_notes.html
+      - text: "Week 3"
+        href: Week3_notes.html
+      - text: "Week 4"
+        href: Week4_notes.html
+  - text: "Quizzes"
+    menu:
+      - text: "Week 2"
+        href: Week2quiz_codes.html
+      - text: "---------"
+      - text: "Week 3"
+        href: Week3quiz_codes.html
+      - text: "---------"
+      - text: "Week 4"
+        href: Week4quiz_codes.html
+  right:
+    - text: How to publish project paper(s) online
+      icon: fa-question fa-lg
+      href: http://cathydatascience.github.io/showprojectsonline
+output:
+ html_document:
+  theme: cosmo
+  highlight: textmate
+  include:
+    after_body: footer.html
+  css: styles.css
